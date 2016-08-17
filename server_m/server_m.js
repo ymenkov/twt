@@ -9,7 +9,9 @@ function WORLD(){
 	var gold=20;
 
 	this.getAll = function(){
-		return all;
+		return all.filter(function(obj){
+			return obj.hp!="del";
+		});
 	}
 
 	this.start = function(){

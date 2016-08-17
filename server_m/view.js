@@ -47,7 +47,7 @@ function VIEW(){
 	}
 
 	function findObjectById(id){
-		for(var i=0; i<allObject.length-1;i++){
+		for(var i=0; i<allObject.length;i++){
 			if(allObject[i].internalId == id)
 				return allObject[i];
 		}
@@ -83,25 +83,31 @@ function VIEW(){
 	}
 
 	function removeIfDie(arrAll, allObject){
-		allObject.forEach(function(elem){
-			for(var i=0; i<arrAll.length-1; i++){
+		allObject.forEach(function(elem, num){
+			for(var i=0; i<arrAll.length; i++){
 				if(arrAll[i].id == elem.internalId) 
 					return true;
 			}
 			if(elem.gameType == 'ORK'){
-				document.getElementById('pic').removeChild(elem);
+				elem.parentNode.removeChild(elem);
+				allObject.splice(num,1);
 			}
 		});
 	}
 
 	this.objectInMap = function (){
 		arrAll = w.getAll();
+		console.dir(arrAll);
 		removeIfDie(arrAll, allObject);
 
-		for (var k=0;k<=arrAll.length-1;k++){
+		for (var k=0;k<arrAll.length;k++){
 			switch (arrAll[k].type){
 				case 'ORK':
 					renderOrk(arrAll[k]);
+					break;
+
+				default:
+					//renderDefault();
 					break;
 			}
 

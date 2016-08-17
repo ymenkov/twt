@@ -1,3 +1,5 @@
+﻿console.log(11111);
+
 function checkToFree(coord){
 	var i = coord[0];
 	var j = coord[1];

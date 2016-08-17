@@ -3,11 +3,14 @@ function WORLD(){
 	throne[0]=[5,0];
 	throne[1]=[5,15];
 	var fieldSize = {heigth:10,width:15};
-	this.all = [];
-	var id = -1;
+	var all = [];
+	var id = 0;
 	var hpBase=10;
 	var gold=20;
 
+	this.getAll = function(){
+		return all;
+	}
 
 	this.start = function(){
 	//Старт таймера	
@@ -26,7 +29,7 @@ function WORLD(){
 		this.id=id;
 		this.type=type;
 		this.coord=coord;
-		this.taget=target;
+		this.target=target;
 		this.damage=damage;
 		this.coolDown=coolDown;
 		this.hp=hp;
@@ -37,13 +40,13 @@ function WORLD(){
 				gold=gold+1;
 			}
 
-			if ((coord[0]==target[0]) && (coord[1]==target[1])){
+			if ((this.coord[0]==this.target[0]) && (this.coord[1]==this.target[1])){
 				hpBase=hpBase-1;
 			}
-			this.id=-1;
+			this.id=0;
 	  	}
 	    this.move = function (){
-	    	if (flagCD==coolDown){
+	    	if (this.flagCD==this.coolDown){
 				var grid = new PF.Grid(fieldSize.heigth+1, fieldSize.width+1); 
 				var finder = new PF.AStarFinder();
 
@@ -52,18 +55,20 @@ function WORLD(){
 	  						grid.setWalkableAt(all[k].coord[0], all[k].coord[1], false);
 	  					}
 	   			}
-
-				var path = finder.findPath(target[0]+1, target[1]+1, coord[0], coord[1], grid);
+	   			alert(coord[0]);
+	   			
+				var path = finder.findPath(target[0]+1, target[1]+1, this.coord[0], this.coord[1], grid);
 				var i=0;
 				path.forEach(function(c){
 					i++;
 				});
-				coord[0]=path[i-2][0];
-				coord[1]=path[i-2][1];
-				if (((coord[0]==target[0]) && (coord[1]==target[1])) || (this.hp<1))
-				this.die.call(this);
-				flagCd=0;
-			} else {flagCd++;}
+				this.coord[0]=path[i-2][0];
+				this.coord[1]=path[i-2][1];
+				if (((coord[0]==target[0]) && (coord[1]==target[1])) || (this.hp<1)){
+					this.die.call(this);
+				}
+				this.flagCd=0;
+			} else {this.flagCd++;}
 		}
 	}
 
@@ -71,7 +76,7 @@ function WORLD(){
 	function createOrk(){
 		id=id+1;
 		all.push(new Ork(id,"ORK",throne[1],throne[0],false,3,5));
-		setInterval(all[0].move.bind(all[0]),600);
+		setInterval(all[all.length-1].move.bind(all.length-1),600);
 		//Добавить орка в общий массив (id,координаты объекта, координаты цели, урон, кулдаун, hp)
 	}
 
@@ -79,7 +84,7 @@ function WORLD(){
 		this.id=id;
 		this.type=type;
 		this.coord=coord;
-		this.taget=false;
+		this.target=false;
 		this.damage=false;
 		this.coolDown=false;
 		this.hp=false;

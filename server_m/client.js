@@ -6,18 +6,21 @@ var hw=50;
 var marg=10;
 var w = new WORLD();
 w.createPlace();
+arrAll = w.getAll();
 var v = new VIEW();
 v.render();
-var i =0;
-searchPlace();
-function searchPlace(){
-	for (var k=0;k<=w.all.length-1;k++){
-		if (w.all[k].type=="PLACE"){
-			i++;
+var arrAll = [];
+
+
+function searchPlace(i,j){
+	for (var k=0;k<=arrAll.length-1;k++){
+		if ((arrAll[k].type=="PLACE") && (arrAll[k].coord[0]==i)&&(arrAll[k].coord[1]==j)){
+			return true;
 		}
 	}
+	return false;
 }
-alert(i);
+
 function VIEW(){
 	this.render = function(){
 		document.getElementById('test').innerHTML = "";
@@ -25,7 +28,7 @@ function VIEW(){
 			for (var j=0;j<=15;j++){
 				var elem=document.createElement('div');
 				elem.style.backgroundColor = "white";
-				if (((i+j)<=9)&&((i+j)>=1)&&(i>j)) {
+				if (searchPlace(i,j)) {
 					elem.style.backgroundColor = "rgb(128, 128, 128)";
 				}
 				if (((throne[0].i==i) && (throne[0].j==j)) || ((throne[1].i==i) && (throne[1].j==j))){

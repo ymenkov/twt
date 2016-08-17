@@ -1,5 +1,3 @@
-﻿console.log(11111);
-
 function checkToFree(coord){
 	var i = coord[0];
 	var j = coord[1];
@@ -138,23 +136,30 @@ function Ork(x,y,elem,id){
 
 	   	 	//var x =	this.i++;
 	   	 	//var y =	this.j++;	
-	   	 	var x1 = this.i;
 
 		///////////////////////////////////////////////
 			//var grid = new PF.Grid(16, 11);
 		
 
-			var grid = new PF.Grid(9, 9); 
+			var grid = new PF.Grid(11, 16); 
 			var finder = new PF.AStarFinder();
-			console.dir(grid);
-			var path = finder.findPath(8, 8, 0, 0, grid);
-			console.dir( path );
+			//console.dir(grid);
+			for (k=0;k<=arrWall.length-1;k++){
+  				grid.setWalkableAt(arrWall[k].i, arrWall[k].j, false);
+   			}
+			var path = finder.findPath(throne[0].i, throne[0].j, this.i, this.j, grid);
+			//console.dir( path );
+			var i=0;
 			path.forEach(function(c){
-				masM[c[0]][c[1]].style.backgroundColor="blue";
+			//	masM[c[0]][c[1]].style.backgroundColor="blue";
+				i++;
 			});
+			//alert(path[i-2]);
+			this.i=path[i-2][0];
+			this.j=path[i-2][1];
+
 		///////////////////////////////////////////////
-	
-  			if (((this.i==throne[0].i) && (this.j==throne[0].j)) || (this.hp<1))
+			  			if (((this.i==throne[0].i) && (this.j==throne[0].j)) || (this.hp<1))
 				this.die.call(this);
 	   		else 
    				this.render.call(this);

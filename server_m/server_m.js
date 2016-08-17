@@ -72,15 +72,17 @@ function WORLD(){
 					this.flagCd=0;
 					} else {this.flagCd++;}
 				}
-		}.bind(this);
+		}
 	}
 
 
 	function createOrk(){
 		id=id+1;
 		var newOrk = new Ork(id,"ORK",throne[1],throne[0],false,3,5);
+		console.log(newOrk);
 		all.push(newOrk);
 		setInterval(newOrk.move.bind(newOrk),600);
+		
 		//Добавить орка в общий массив (id,координаты объекта, координаты цели, урон, кулдаун, hp)
 	}
 

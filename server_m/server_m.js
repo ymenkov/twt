@@ -46,37 +46,41 @@ function WORLD(){
 			this.id=0;
 	  	}
 	    this.move = function (){
-	    	if (this.flagCD==this.coolDown){
-				var grid = new PF.Grid(fieldSize.heigth+1, fieldSize.width+1); 
-				var finder = new PF.AStarFinder();
+		    if(this.id!=0){	
+		    	if (this.flagCD==this.coolDown){
+					var grid = new PF.Grid(fieldSize.heigth+1, fieldSize.width+1); 
+					var finder = new PF.AStarFinder();
 
-				for (k=0;k<=all.length-1;k++){
-						if (all[k].type=="WALL"){
-	  						grid.setWalkableAt(all[k].coord[0], all[k].coord[1], false);
-	  					}
-	   			}
-	   			alert(coord[0]);
-	   			
-				var path = finder.findPath(target[0]+1, target[1]+1, this.coord[0], this.coord[1], grid);
-				var i=0;
-				path.forEach(function(c){
-					i++;
-				});
-				this.coord[0]=path[i-2][0];
-				this.coord[1]=path[i-2][1];
-				if (((coord[0]==target[0]) && (coord[1]==target[1])) || (this.hp<1)){
-					this.die.call(this);
+					for (k=0;k<=all.length-1;k++){
+							if (all[k].type=="WALL"){
+		  						grid.setWalkableAt(all[k].coord[0], all[k].coord[1], false);
+		  					}
+		   			}
+		   			
+		   			
+					var path = finder.findPath(this.target[0], this.target[1], this.coord[0], this.coord[1], grid);
+					var i=0;
+					path.forEach(function(c){
+						i++;
+					});
+					this.coord[0]=path[i-2][0];
+					this.coord[1]=path[i-2][1];
+
+					if (((this.coord[0]==this.target[0]) && (this.coord[1]==this.target[1])) || (this.hp<1)){
+						this.die.call(this);
+					}
+					this.flagCd=0;
+					} else {this.flagCd++;}
 				}
-				this.flagCd=0;
-			} else {this.flagCd++;}
-		}
+		}.bind(this);
 	}
 
 
 	function createOrk(){
 		id=id+1;
-		all.push(new Ork(id,"ORK",throne[1],throne[0],false,3,5));
-		setInterval(all[all.length-1].move.bind(all.length-1),600);
+		var newOrk = new Ork(id,"ORK",throne[1],throne[0],false,3,5);
+		all.push(newOrk);
+		setInterval(newOrk.move.bind(newOrk),600);
 		//Добавить орка в общий массив (id,координаты объекта, координаты цели, урон, кулдаун, hp)
 	}
 

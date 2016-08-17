@@ -43,10 +43,10 @@ function WORLD(){
 			if ((this.coord[0]==this.target[0]) && (this.coord[1]==this.target[1])){
 				hpBase=hpBase-1;
 			}
-			this.id=0;
+			this.hp="del";
 	  	}
 	    this.move = function (){
-		    if(this.id!=0){	
+		    if(this.hp!="del"){	
 		    	if (this.flagCD==this.coolDown){
 					var grid = new PF.Grid(fieldSize.heigth+1, fieldSize.width+1); 
 					var finder = new PF.AStarFinder();

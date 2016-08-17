@@ -72,24 +72,26 @@ function VIEW(){
 	this.objectInMap = function (){
 		arrAll = w.getAll();
 		for (var k=0;k<=arrAll.length-1;k++){
-			if ((arrAll[k].type=="ORK")&&(arrAll[k].id!=0)){
+			if ((arrAll[k].type=="ORK")){
 				//alert(this.searchRepeat(arrAll[k].id)[1]);
 				var ch = this.searchRepeat(arrAll[k].id);
 				x=arrAll[k].coord[0];
 				y=arrAll[k].coord[1];
-				if(ch===null){
+				if((ch===null)&&(arrAll[k].hp!="del")){
 					var elem=document.createElement('img');
 				 	elem.src='photo.jpg';
 				 	var elem1=document.createElement('div');
 				 	elem1.style.transition="all 1s";
 				 	document.getElementById('pic').appendChild(elem1).appendChild(elem);
-				 	elem.style.visibility="visible";
-			   		elem.style.left = (y*hw + marg*y) + 'px';
-			   		elem.style.top = (x*hw + marg*x) + 'px';
-			   		allObject.push(new infObj(arrAll[k].id,arrAll[k].type,arrAll[k].coord,arrAll[k].target,arrAll[k].damage,arrAll[k].hp,elem));
+				 	elem1.style.visibility="visible";
+			   		elem1.style.left = (y*hw + marg*y) + 'px';
+			   		elem1.style.top = (x*hw + marg*x) + 'px';
+			   		allObject.push(new infObj(arrAll[k].id,arrAll[k].type,arrAll[k].coord,arrAll[k].target,arrAll[k].damage,arrAll[k].hp,elem1));
 				} else {
-					if (arrAll[k].id==0){
+					if ((arrAll[k].hp=="del")&&(allObject[ch].hp!="del")){
 						document.getElementById('pic').removeChild(allObject[ch].elem);
+						allObject[ch].hp="del";
+						
 					}
 					allObject[ch].coord=arrAll[k].coord;
 					allObject[ch].elem.style.left = (y*hw + marg*y) + 'px';
@@ -100,7 +102,7 @@ function VIEW(){
 			
 	}
 
-	setInterval(this.objectInMap.bind(this), 1000);
+	setInterval(this.objectInMap.bind(this), 100);
 
 
 }

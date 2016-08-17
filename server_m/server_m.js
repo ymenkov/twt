@@ -3,7 +3,7 @@ function WORLD(){
 	throne[0]=[5,0];
 	throne[1]=[5,15];
 	var fieldSize = {heigth:10,width:15};
-	var all = [];
+	this.all = [];
 	var id = -1;
 	var hpBase=10;
 	var gold=20;

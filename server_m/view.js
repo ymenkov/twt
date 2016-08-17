@@ -46,63 +46,6 @@ function VIEW(){
 		}
 	}
 
-	// this.searchRepeat = function (id){
-	// 	for (var m=0;m<=allObject.length-1;m++){
-	// 		for (var k=0;k<=arrAll.length-1;k++){
-	// 			if (arrAll[k].id==allObject[m].id){
-	// 				return m;
-	// 			}
-	// 		}
-	// 	}
-	// 	return null;
-	// }
-
-
-	// function infObj(id,type,coord,target,damage,hp,elem){
-	// 	this.id=id;
-	// 	this.type=type;
-	// 	this.coord=coord;
-	// 	this.taget=target;
-	// 	this.damage=damage;
-	// 	//this.coolDown=coolDown;
-	// 	this.hp=hp;
-	// 	this.elem=elem;
-	// }
-
-	// this.objectInMap = function (){
-	// 	arrAll = w.getAll();
-	// 	for (var k=0;k<=arrAll.length-1;k++){
-	// 		if ((arrAll[k].type=="ORK")){
-	// 			//alert(this.searchRepeat(arrAll[k].id)[1]);
-	// 			var ch = this.searchRepeat(arrAll[k].id);
-	// 			x=arrAll[k].coord[0];
-	// 			y=arrAll[k].coord[1];
-	// 			if((ch===null)&&(arrAll[k].hp!="del")){
-	// 				var elem=document.createElement('img');
-	// 			 	elem.src='photo.jpg';
-	// 			 	var elem1=document.createElement('div');
-	// 			 	elem1.style.transition="all 1s";
-	// 			 	document.getElementById('pic').appendChild(elem1).appendChild(elem);
-	// 			 	elem1.style.visibility="visible";
-	// 		   		elem1.style.left = (y*hw + marg*y) + 'px';
-	// 		   		elem1.style.top = (x*hw + marg*x) + 'px';
-	// 		   		allObject.push(new infObj(arrAll[k].id,arrAll[k].type,arrAll[k].coord,arrAll[k].target,arrAll[k].damage,arrAll[k].hp,elem1));
-	// 			} else {
-	// 				if ((arrAll[k].hp=="del")&&(allObject[ch].hp!="del")){
-	// 					document.getElementById('pic').removeChild(allObject[ch].elem);
-	// 					allObject[ch].hp="del";
-	// 				} else  {
-	// 					allObject[ch].coord=arrAll[k].coord;
-	// 					allObject[ch].elem.style.left = (y*hw + marg*y) + 'px';
-	// 			   		allObject[ch].elem.style.top = (x*hw + marg*x) + 'px';
-	// 		   		}
-			   		
-	// 			}
-	// 		}
-	// 	}
-			
-	// }
-
 	function findObjectById(id){
 		for(var i=0; i<allObject.length-1;i++){
 			if(allObject[i].internalId == id)
@@ -111,21 +54,25 @@ function VIEW(){
 		return false;
 	}
 
-	function drawOrk(orkObj){
+	function renderOrk(orkObj){
 		var orkElem = findObjectById(orkObj.id)
 		var x = orkObj.coord[0];
 		var y = orkObj.coord[1];
 		
 		if(!orkElem){
+
 			var picture=document.createElement('img');
 		 	picture.src='photo.jpg';
+		 	picture.style.visibility="visible";
+
 		 	var newOrkElem=document.createElement('div');
 		 	newOrkElem.style.transition="all 1s";
+		 	newOrkElem.internalId = orkObj.id;
+		 	newOrkElem.gameType='ORK';
+
 		 	document.getElementById('pic')
 		 		.appendChild(newOrkElem)
 		 		.appendChild(picture);
-		 	picture.style.visibility="visible";
-		 	newOrkElem.internalId = orkObj.id;
 
 			allObject.push(newOrkElem);
 			orkElem = newOrkElem;
@@ -136,13 +83,15 @@ function VIEW(){
 	}
 
 	function removeIfDie(arrAll, allObject){
-		allObject = allObject.filter(function(elem){
-			for(var i=0; i<arrAll.length-1; i++)
-				if(arrAll[i].id == elem.internalId) return true;
-
-			return false;
-		})
-		return true;
+		allObject.forEach(function(elem){
+			for(var i=0; i<arrAll.length-1; i++){
+				if(arrAll[i].id == elem.internalId) 
+					return true;
+			}
+			if(elem.gameType == 'ORK'){
+				document.getElementById('pic').removeChild(elem);
+			}
+		});
 	}
 
 	this.objectInMap = function (){
@@ -152,7 +101,7 @@ function VIEW(){
 		for (var k=0;k<=arrAll.length-1;k++){
 			switch (arrAll[k].type){
 				case 'ORK':
-					drawOrk(arrAll[k]);
+					renderOrk(arrAll[k]);
 					break;
 			}
 

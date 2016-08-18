@@ -4,7 +4,6 @@ throne[0]={i:5,j:0};
 throne[1]={i:5,j:15};
 var hw=50;
 var marg=10;
-
 var w = new WORLD();
 w.createPlace();
 arrAll = w.getAll();
@@ -39,7 +38,7 @@ function VIEW(){
 	var allObject = [];
 	var images = {
 		'ORK' : 'photo.jpg',
-		'TOWER' : 'tower.jpg',
+		'TOWER' : 'tower.png',
 	};
 
 	this.render = function(){
@@ -58,8 +57,10 @@ function VIEW(){
 				elem.style.top = (i*hw + marg*i) + 'px';
 				elem.style.border = 'outset';
 				masM[i][j] = elem;
+				//document.getElementById('test')
+				elem.onclick = c.kappa;
+				//console.log(elem);
 				document.getElementById('test').appendChild(elem);
-				document.getElementById('test').onclick = c.kappa;
 			}
 		}
 	}
@@ -118,11 +119,24 @@ function VIEW(){
 		//console.dir(arrAll);
 		removeIfDie(arrAll, allObject);
 		arrAll.forEach(function(object){
-			if (object.type=="WALL"){
+			switch (object.type){
+				case 'WALL' :
 				masM[object.coord[0]][object.coord[1]].style.backgroundColor ="rgb(28, 28, 28)";
-			} else {
-			renderObject(object, images[object.type]);
+				break;
+
+				case 'PLACE' :
+				break;
+
+				default:
+				renderObject(object, images[object.type]);
+				break;
 			}
+			// if (object.type=="WALL"){
+			// 	masM[object.coord[0]][object.coord[1]].style.backgroundColor ="rgb(28, 28, 28)";
+			// } else {
+			// 	console.log(object.type);
+			// renderObject(object, images[object.type]);
+			// }
 		});	
 	}
 

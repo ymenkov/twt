@@ -48,7 +48,7 @@ function WORLD(){
 			if ((this.coord[0]==this.target[0]) && (this.coord[1]==this.target[1])){
 				hpBase=hpBase-1;
 			}
-			this.hp="del";
+		this.hp="del";
 	  	}
 	    this.move = function (){
 		    if(this.hp!="del"){	
@@ -114,8 +114,36 @@ function WORLD(){
 		}
 	}	
 
+	function Tower (id,type,coord,attackTarget,damage,coolDown,hp){
+		this.id=id;
+		this.type=type;
+		this.coord=coord;
+		this.attackTarget=attackTarget;
+		this.damage=damage;
+		this.coolDown=coolDown;
+		this.hp=hp;
+
+		this.shot = function(){
+			for (var i=0;i<=all.length-1;i++){
+	         	if 	((all[i].type=="ORK")&&((Math.abs(all[i].coord[0]-this.coord[0]))<3)&&((Math.abs(all[i].coord[1]-this.coord[1]))<3))
+	         	{
+	         		this.attackTarget=i;
+	         		all[i].hp=all[i].hp-this.damage;
+	         	}
+	        }
+
+		}
+	}	
+
 	this.createWall = function (i,j){
 		id=id+1;
 		all.push(new placeWall(id,"WALL",[i,j],false,false,false,false));
 	}
+	this.createTower = function (i,j){
+		id=id+1;
+		var newTower = new Tower(id,"TOWER",[i,j],false,3,2,10);
+		all.push(newTower);
+		setInterval(newTower.shot.bind(newTower),100);
+	}
+	
 }

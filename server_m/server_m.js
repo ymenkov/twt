@@ -10,6 +10,10 @@ function WORLD(){
 	var id = 0;
 	var hpBase=10;
 	var gold=20;
+	var wall=10;
+	var place=2;
+	var tow=2;
+
 
 	this.getAll = function(){
 		return all.filter(function(obj){
@@ -19,6 +23,8 @@ function WORLD(){
 
 	this.start = function(){
 	//Старт таймера	
+	setInterval(function(){all[0]=new information;}.bind(this),100);
+
 	createOrk();
 	}
 
@@ -26,9 +32,16 @@ function WORLD(){
 	//добавить башню
 	}
 
-	this.addPlace = function(){
-	//добавить место под башню
+	
+	function information(){
+		this.type="INFO";
+		this.gold=gold;
+		this.hpBase=hpBase;
+		this.wall=wall;
+		this.tow=tow;
+		this.place=place;
 	}
+
 
 	function Ork(id,type,coord,target,damage,coolDown,hp){
 		this.id=id;
@@ -70,12 +83,12 @@ function WORLD(){
 					});
 					this.coord[0]=path[i-2][0];
 					this.coord[1]=path[i-2][1];
-
+					this.flagCd=0;
 					if (((this.coord[0]==this.target[0]) && (this.coord[1]==this.target[1])) || (this.hp<1)){
 						this.die.call(this);
 					}
-					this.flagCd=0;
-					} else {this.flagCd++;}
+					
+					} else {this.flagCd++;alert(123)}
 				}
 		}
 	}
@@ -85,7 +98,7 @@ function WORLD(){
 		id=id+1;
 		var target = [throne[0].i,throne[0].j];
 		var coord = [throne[1].i,throne[1].j];
-		var newOrk = new Ork(id,"ORK",coord,target,false,3,5);
+		var newOrk = new Ork(id,"ORK",coord,target,false,50,5);
 		console.log(newOrk);
 		all.push(newOrk);
 		setInterval(newOrk.move.bind(newOrk),600);
@@ -129,6 +142,7 @@ function WORLD(){
 	         	{
 	         		this.attackTarget=i;
 	         		all[i].hp=all[i].hp-this.damage;
+	         		break;
 	         	}
 	        }
 
@@ -136,14 +150,41 @@ function WORLD(){
 	}	
 
 	this.createWall = function (i,j){
+		if ((gold>9) && (wall>0)){
 		id=id+1;
+		wall=wall-1;
 		all.push(new placeWall(id,"WALL",[i,j],false,false,false,false));
+		}
 	}
+
+	function searchPlace(i,j){
+		for (var k=0;k<=all.length-1;k++){
+			if ((all[k].type=="PLACE") && (all[k].coord[0]==i)&&(all[k].coord[1]==j)){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	this.createTower = function (i,j){
+		if (((gold>9) || (tow>0))&&(searchPlace(i,j))){
+		if (tow>0){tow=tow-1}else{gold=gold-10;}
 		id=id+1;
-		var newTower = new Tower(id,"TOWER",[i,j],false,3,2,10);
+		var newTower = new Tower(id,"TOWER",[i,j],false,1,2,10);
 		all.push(newTower);
-		setInterval(newTower.shot.bind(newTower),100);
+		setInterval(newTower.shot.bind(newTower),1000);
+		}
+	}
+
+	this.addPlace=function(i,j){
+		if (((j>0)&&(searchPlace(i,j-1)))||((i>0)&&(searchPlace(i-1,j)))||((j<15)&&(searchPlace(i,j+1)))||((i<10)&&(searchPlace(i+1,j)))){
+			if (((gold>9) || (place>0))){
+				if (place>0){place=place-1}else{gold=gold-10;}
+				id=id+1;
+				//alert(1);
+				all.push(new placeWall(id,"PLACE",[i,j],false,false,false,false));
+			}
+		}
 	}
 	
 }

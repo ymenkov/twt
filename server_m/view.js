@@ -125,6 +125,27 @@ function VIEW(){
 				break;
 
 				case 'PLACE' :
+				if (masM[object.coord[0]][object.coord[1]].style.backgroundColor!="black"){
+					masM[object.coord[0]][object.coord[1]].style.backgroundColor = "rgb(128, 128, 128)";
+					}
+				break;
+
+				case 'INFO' :
+					var t = document.getElementById("Gold"); 
+					t.innerHTML = "Gold : "+object.gold;
+
+					t = document.getElementById("txt"); 
+					t.innerHTML = "Стенок осталось : "+object.wall;
+
+					t = document.getElementById("hp"); 
+					t.innerHTML = "Здоровье базы : "+object.hpBase;
+
+					t = document.getElementById("tower"); 
+					t.innerHTML = "Количество башен : "+object.tow;
+
+					t = document.getElementById("place"); 
+					t.innerHTML = "Количество блоков : "+object.place;
+
 				break;
 
 				default:

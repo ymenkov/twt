@@ -79,7 +79,7 @@ function WORLD(){
 				}
 		}
 	}
-		
+
 
 	function createOrk(){
 		id=id+1;
@@ -114,7 +114,7 @@ function WORLD(){
 		}
 	}	
 
-	function createWall(i,j){
+	this.createWall = function (i,j){
 		id=id+1;
 		all.push(new placeWall(id,"WALL",[i,j],false,false,false,false));
 	}

@@ -11,6 +11,11 @@ arrAll = w.getAll();
 
 var c = new CONTROLLER();
 
+var masM = new Array(11);
+	for (var k=0; k<=masM.length-1; k++) {
+		masM[k] = new Array(16);
+	}
+
 var v = new VIEW();
 v.render();
 
@@ -32,7 +37,6 @@ function searchPlace(i,j){
 
 function VIEW(){
 	var allObject = [];
-
 	var images = {
 		'ORK' : 'photo.jpg',
 		'TOWER' : 'tower.jpg',
@@ -53,6 +57,7 @@ function VIEW(){
 				elem.style.left = (j*hw + marg*j) + 'px';
 				elem.style.top = (i*hw + marg*i) + 'px';
 				elem.style.border = 'outset';
+				masM[i][j] = elem;
 				document.getElementById('test').appendChild(elem);
 				document.getElementById('test').onclick = c.kappa;
 			}

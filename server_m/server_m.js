@@ -125,7 +125,7 @@ function WORLD(){
 
 		this.shot = function(){
 			for (var i=0;i<=all.length-1;i++){
-	         	if 	((all[i].type=="ORK")&&((Math.abs(all[i].coord[0]-this.coord[0]))<3)&&((Math.abs(all[i].coord[1]-this.coord[1]))<3))
+	         	if 	((all[i].type=="ORK")&&(all[i].hp!="del")&&((Math.abs(all[i].coord[0]-this.coord[0]))<3)&&((Math.abs(all[i].coord[1]-this.coord[1]))<3))
 	         	{
 	         		this.attackTarget=i;
 	         		all[i].hp=all[i].hp-this.damage;

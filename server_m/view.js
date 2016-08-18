@@ -26,6 +26,12 @@ function searchPlace(i,j){
 
 function VIEW(){
 	var allObject = [];
+
+	var images = {
+		'ORK' : 'photo.jpg',
+		'TOWER' : 'tower.jpg',
+	};
+
 	this.render = function(){
 		document.getElementById('test').innerHTML = "";
 		for (var i=0;i<=10;i++){
@@ -54,32 +60,32 @@ function VIEW(){
 		return false;
 	}
 
-	function renderOrk(orkObj){
-		var orkElem = findObjectById(orkObj.id)
-		var x = orkObj.coord[0];
-		var y = orkObj.coord[1];
+	function renderObject(object, image){
+		var renderElem = findObjectById(object.id); //ищем элемент среди созданных
+		var x = object.coord[0];
+		var y = object.coord[1];
 		
-		if(!orkElem){
+		if(!renderElem){ //Если элемент не создан - добавляем
+		 	renderElem = document.createElement('div');
+		 	renderElem.style.transition="all 1s";
+		 	renderElem.internalId = object.id;
+		 	renderElem.type=object.type;
 
-			var picture=document.createElement('img');
-		 	picture.src='photo.jpg';
-		 	picture.style.visibility="visible";
+		 	document.getElementById('pic').appendChild(renderElem);
+			allObject.push(renderElem);
 
-		 	var newOrkElem=document.createElement('div');
-		 	newOrkElem.style.transition="all 1s";
-		 	newOrkElem.internalId = orkObj.id;
-		 	newOrkElem.gameType='ORK';
-
-		 	document.getElementById('pic')
-		 		.appendChild(newOrkElem)
-		 		.appendChild(picture);
-
-			allObject.push(newOrkElem);
-			orkElem = newOrkElem;
+			if(image){ //Если есть картинка - добавляем ее внутрь элемента
+				var picture=document.createElement('img');
+			 	picture.src=image;
+			 	picture.style.visibility="visible";
+			 	renderElem.appendChild(picture);
+			}
 		}
 
-		orkElem.style.left=(y*hw + marg*y) + 'px';
-		orkElem.style.top=(x*hw + marg*x) + 'px';
+		//Далее двигаем наш элемент на карте
+		renderElem.hp = object.hp;
+		renderElem.style.left=(y*hw + marg*y) + 'px';
+		renderElem.style.top=(x*hw + marg*x) + 'px';
 	}
 
 	function removeIfDie(arrAll, allObject){
@@ -88,7 +94,7 @@ function VIEW(){
 				if(arrAll[i].id == elem.internalId) 
 					return true;
 			}
-			if(elem.gameType == 'ORK'){
+			if(elem.type == 'ORK'){
 				elem.parentNode.removeChild(elem);
 				allObject.splice(num,1);
 			}
@@ -97,25 +103,15 @@ function VIEW(){
 
 	this.objectInMap = function (){
 		arrAll = w.getAll();
-		console.dir(arrAll);
+		//console.dir(arrAll);
 		removeIfDie(arrAll, allObject);
 
-		for (var k=0;k<arrAll.length;k++){
-			switch (arrAll[k].type){
-				case 'ORK':
-					renderOrk(arrAll[k]);
-					break;
-
-				default:
-					//renderDefault();
-					break;
-			}
-
-		}
-			
+		arrAll.forEach(function(object){
+			renderObject(object, images[object.type]);
+		});	
 	}
 
-	setInterval(this.objectInMap.bind(this), 100);
 
+	setInterval(this.objectInMap.bind(this), 100);
 
 }

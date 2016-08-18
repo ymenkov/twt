@@ -4,8 +4,10 @@ throne[0]={i:5,j:0};
 throne[1]={i:5,j:15};
 var hw=50;
 var marg=10;
+var player="Василий";
 var w = new WORLD();
-w.createPlace();
+w.createPlayer(player, [7,7]);
+//w.createPlace();
 arrAll = w.getAll();
 
 var c = new CONTROLLER();
@@ -50,9 +52,7 @@ function VIEW(){
 				if (searchPlace(i,j)) {
 					elem.style.backgroundColor = "rgb(128, 128, 128)";
 				}
-				if (((throne[0].i==i) && (throne[0].j==j)) || ((throne[1].i==i) && (throne[1].j==j))){
-						elem.style.backgroundColor = "black";
-				}
+				
 				elem.style.left = (j*hw + marg*j) + 'px';
 				elem.style.top = (i*hw + marg*i) + 'px';
 				elem.style.border = 'outset';
@@ -161,6 +161,10 @@ function VIEW(){
 					t = document.getElementById("place"); 
 					t.innerHTML = "Количество блоков : "+object.place;
 
+				break;
+
+				case 'CASTLE':
+					masM[object.coord[0]][object.coord[1]].style.backgroundColor = "BLACK";
 				break;
 
 				default:

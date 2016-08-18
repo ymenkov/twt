@@ -11,6 +11,41 @@ function WORLD(){
 	var place=2;
 	var tow=2;
 
+	var players = [];
+
+	this.createPlayer = function(name, coordinate){
+		var new_player = {
+			id: id++,
+			gold: 20,
+			name: name
+		}; 
+		players.push(new_player);
+
+		//this.createCastle(new_player.id, coordinate);
+		var newCastle = new Castle(id,"CASTLE",coordinate,new_player.id,10);
+		all.push(newCastle);
+		all[all.length-1].buildCastle();
+	}
+
+	function Castle(id,type,coord,player_id,hp){
+		this.id=id;
+		this.type=type;
+		this.coord=coord;
+		this.player_id=player_id;
+		this.hp=hp;
+		this.buildCastle=function(){
+			console.log(coord);
+			for (var i=0;i<=10;i++){
+				for(var j=0;j<=15;j++){
+					if ((Math.abs((i-this.coord[0]))<3)&&(Math.abs((j-this.coord[1])))<3){
+						id=id+1;
+						all.push(new placeWall(id,"PLACE",[i,j],false,false,false,false));
+					}
+				}
+			}	
+			}.bind(this);
+		}
+	
 
 	this.getAll = function(){
 		return all.filter(function(obj){
@@ -21,14 +56,8 @@ function WORLD(){
 	this.start = function(){
 	//Старт таймера	
 	setInterval(function(){all[0]=new information;}.bind(this),100);
-
 	createOrk();
 	}
-
-	this.addTower = function(){
-	//добавить башню
-	}
-
 	
 	function information(){
 		this.type="INFO";
@@ -48,7 +77,7 @@ function WORLD(){
 		this.damage=damage;
 		this.coolDown=coolDown;
 		this.hp=hp;
-		this.flagCD=coolDown;
+		var flagCD=coolDown;
 		
 	  	this.die = function(){
 			if (this.hp<1){
@@ -62,7 +91,7 @@ function WORLD(){
 	  	}
 	    this.move = function (){
 		    if(this.hp!="del"){	
-		    	if (this.flagCD==this.coolDown){
+		    	if (flagCD==this.coolDown){
 					var grid = new PF.Grid(fieldSize.heigth+1, fieldSize.width+1); 
 					var finder = new PF.AStarFinder();
 
@@ -80,12 +109,12 @@ function WORLD(){
 					});
 					this.coord[0]=path[i-2][0];
 					this.coord[1]=path[i-2][1];
-					this.flagCd=0;
+					flagCD=0;
 					if (((this.coord[0]==this.target[0]) && (this.coord[1]==this.target[1])) || (this.hp<1)){
 						this.die.call(this);
 					}
 					
-					} else {this.flagCd++;alert(123)}
+					} else {flagCD++;}
 				}
 		}
 	}
@@ -95,10 +124,10 @@ function WORLD(){
 		id=id+1;
 		var target = [throne[0].i,throne[0].j];
 		var coord = [throne[1].i,throne[1].j];
-		var newOrk = new Ork(id,"ORK",coord,target,false,50,5);
+		var newOrk = new Ork(id,"ORK",coord,target,false,6,5);
 		console.log(newOrk);
 		all.push(newOrk);
-		setInterval(newOrk.move.bind(newOrk),600);
+		setInterval(newOrk.move.bind(newOrk),100);
 		
 		//Добавить орка в общий массив (id,координаты объекта, координаты цели, урон, кулдаун, hp)
 	}

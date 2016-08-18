@@ -97,8 +97,23 @@ function VIEW(){
 
 		//Далее двигаем наш элемент на карте
 		renderElem.hp = object.hp;
+		renderElem.coord = object.coord;
 		renderElem.style.left=(y*hw + marg*y) + 'px';
 		renderElem.style.top=(x*hw + marg*x) + 'px';
+	}
+
+	function renderAttackAnimation(type, from, to){
+		var shot=document.createElement('div');
+		shot.setCoordinate = function(x, y){
+			this.style.left = x*hw + x*marg + 'px';
+	 		this.style.top = y*hw + y*marg + 'px';
+	 	}
+
+	 	var parent = document.getElementById('ololo');
+	 	parent.appendChild(shot).setCoordinate(from[0]-1, from[1]+1);
+
+	 	setTimeout(shot.setCoordinate.bind(shot, to[0]-1, to[1]+1), 100);
+	 	setTimeout(parent.removeChild.bind(parent, shot), 1500);
 	}
 
 	function removeIfDie(arrAll, allObject){
@@ -149,8 +164,13 @@ function VIEW(){
 				break;
 
 				default:
-				renderObject(object, images[object.type]);
-				break;
+					renderObject(object, images[object.type]);
+					if(object.attackTarget){
+						var target_obj = findObjectById(object.attackTarget);
+						if(target_obj)
+							renderAttackAnimation(object.type, object.coord, target_obj.coord);
+					}
+					break;
 			}
 			// if (object.type=="WALL"){
 			// 	masM[object.coord[0]][object.coord[1]].style.backgroundColor ="rgb(28, 28, 28)";

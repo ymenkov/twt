@@ -165,8 +165,7 @@ function VIEW(){
 				break;
 
 				case 'CASTLE':
-					alert("da");
-					masM[object.coord[0]][object.coord[1]].style.backgroundColor = "black";
+				masM[object.coord[0]][object.coord[1]].style.backgroundColor = "black";
 				break;
 
 				default:

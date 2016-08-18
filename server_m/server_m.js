@@ -1,6 +1,6 @@
 function WORLD(){
 	var throne=[];
-	throne[0]={i:5,j:0};
+	throne[0]={i:5,j:15};
 	throne[1]={i:5,j:15};
 	var fieldSize = {heigth:10,width:15};
 	var all = [];
@@ -18,7 +18,7 @@ function WORLD(){
 			id: id++,
 			gold: 20,
 			name: name,
-			coordinate:coordinate
+			coord:coordinate
 		}; 
 		players.push(new_player);
 
@@ -27,7 +27,7 @@ function WORLD(){
 		//all.push(newCastle);
 		all.push(new Castle(id,"CASTLE",coordinate,new_player.id,10));
 		all[all.length-1].buildCastle();
-		//this.start(new_player.id);
+		this.start(new_player.id);
 
 	}
 
@@ -42,12 +42,15 @@ function WORLD(){
 			for (var i=0;i<=10;i++){
 				for(var j=0;j<=15;j++){
 					if ((Math.abs((i-this.coord[0]))<3)&&(Math.abs((j-this.coord[1])))<3){
+						if ((i==this.coord[0])&&(j==this.coord[1])){}else{
 							id=id+1;
-							all.push(new placeWall(id,"PLACE",[i,j],false,false,false,false));
+							all.push(new placeWall(id,"PLACE",[i,j],false,false,false,false,player_id));
+						}
 							
 					}
 				}
-			}	
+			}
+			console.log(all)	
 			}.bind(this);
 		}
 	
@@ -61,7 +64,7 @@ function WORLD(){
 	this.start = function(player_id){
 	//Старт таймера	
 	setInterval(function(){all.push(new information)}.bind(this),100);
-	createOrk(player_id);
+	setInterval(function(){createOrk(player_id);}.bind(this),2000);
 	}
 	
 	function information(){
@@ -117,6 +120,7 @@ function WORLD(){
 					this.coord[1]=path[i-2][1];
 					flagCD=0;
 					if (((this.coord[0]==this.target[0]) && (this.coord[1]==this.target[1])) || (this.hp<1)){
+						//alert(123);
 						this.die.call(this);
 					}
 					
@@ -125,11 +129,29 @@ function WORLD(){
 		}
 	}
 
+	function searchPlayerCoord(player_id){
+		for (var i=0;i<=players.length-1;i++){
+			if (players[i].id==player_id){
+				return players[i].coord;
+			}
+		}
+	}
+
+	function searchEnemy(player_id){
+		for (var i=0;i<=players.length-1;i++){
+			if (players[i].id!=player_id){
+				return players[i].coord;
+			}
+		}
+	}
+
 
 	function createOrk(player_id){
 		id=id+1;
-		var target = [throne[0].i,throne[0].j];
-		var coord = [throne[1].i,throne[1].j];
+		var spc=searchPlayerCoord(player_id);
+		var enemy=searchEnemy(player_id);
+		var target = enemy;
+		var coord = [spc[0],spc[1]];
 		var newOrk = new Ork(id,"ORK",coord,target,false,6,5,player_id);
 		console.log(newOrk);
 		all.push(newOrk);
@@ -191,9 +213,10 @@ function WORLD(){
 		}
 	}
 
-	function searchPlace(i,j){
+	function searchPlace(i,j,player_id){
+
 		for (var k=0;k<=all.length-1;k++){
-			if ((all[k].type=="PLACE") && (all[k].coord[0]==i)&&(all[k].coord[1]==j)){
+			if ((all[k].type=="PLACE") && (all[k].coord[0]==i)&&(all[k].coord[1]==j)&&(player_id==all[k].player_id)){
 				return true;
 			}
 		}
@@ -201,7 +224,7 @@ function WORLD(){
 	}
 
 	this.createTower = function (i,j,player_id){
-		if (((gold>9) || (tow>0))&&(searchPlace(i,j))){
+		if (((gold>9) || (tow>0))&&(searchPlace(i,j,player_id))){
 		if (tow>0){tow=tow-1}else{gold=gold-10;}
 		id=id+1;
 		var newTower = new Tower(id,"TOWER",[i,j],false,1,2,10,player_id);
@@ -212,11 +235,10 @@ function WORLD(){
 	}
 
 	this.addPlace=function(i,j,player_id){
-		if (((j>0)&&(searchPlace(i,j-1)))||((i>0)&&(searchPlace(i-1,j)))||((j<15)&&(searchPlace(i,j+1)))||((i<10)&&(searchPlace(i+1,j)))){
+		if (((j>0)&&(searchPlace(i,j-1,player_id)))||((i>0)&&(searchPlace(i-1,j,player_id)))||((j<15)&&(searchPlace(i,j+1,player_id)))||((i<10)&&(searchPlace(i+1,j,player_id)))){
 			if (((gold>9) || (place>0))){
 				if (place>0){place=place-1}else{gold=gold-10;}
 				id=id+1;
-				//alert(1);
 				all.push(new placeWall(id,"PLACE",[i,j],false,false,false,false,player_id));
 			}
 		}

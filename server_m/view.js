@@ -4,11 +4,17 @@ throne[0]={i:5,j:0};
 throne[1]={i:5,j:15};
 var hw=50;
 var marg=10;
+
 var w = new WORLD();
 w.createPlace();
 arrAll = w.getAll();
+
+var c = new CONTROLLER();
+
 var v = new VIEW();
 v.render();
+
+
 var arrAll = [];
 
 
@@ -48,6 +54,7 @@ function VIEW(){
 				elem.style.top = (i*hw + marg*i) + 'px';
 				elem.style.border = 'outset';
 				document.getElementById('test').appendChild(elem);
+				document.getElementById('test').onclick = c.kappa;
 			}
 		}
 	}
@@ -115,3 +122,4 @@ function VIEW(){
 	setInterval(this.objectInMap.bind(this), 100);
 
 }
+

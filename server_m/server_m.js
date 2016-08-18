@@ -1,7 +1,10 @@
 function WORLD(){
+	// var throne=[];
+	// throne[0]=[5,0];
+	// throne[1]=[5,15];
 	var throne=[];
-	throne[0]=[5,0];
-	throne[1]=[5,15];
+	throne[0]={i:5,j:0};
+	throne[1]={i:5,j:15};
 	var fieldSize = {heigth:10,width:15};
 	var all = [];
 	var id = 0;
@@ -76,11 +79,13 @@ function WORLD(){
 				}
 		}
 	}
-
+		
 
 	function createOrk(){
 		id=id+1;
-		var newOrk = new Ork(id,"ORK",throne[1],throne[0],false,3,5);
+		var target = [throne[0].i,throne[0].j];
+		var coord = [throne[1].i,throne[1].j];
+		var newOrk = new Ork(id,"ORK",coord,target,false,3,5);
 		console.log(newOrk);
 		all.push(newOrk);
 		setInterval(newOrk.move.bind(newOrk),600);

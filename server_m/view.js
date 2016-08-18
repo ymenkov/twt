@@ -117,9 +117,12 @@ function VIEW(){
 		arrAll = w.getAll();
 		//console.dir(arrAll);
 		removeIfDie(arrAll, allObject);
-
 		arrAll.forEach(function(object){
+			if (object.type=="WALL"){
+				masM[object.coord[0]][object.coord[1]].style.backgroundColor ="rgb(28, 28, 28)";
+			} else {
 			renderObject(object, images[object.type]);
+			}
 		});	
 	}
 

@@ -121,7 +121,7 @@ function VIEW(){
 		arrAll.forEach(function(object){
 			switch (object.type){
 				case 'WALL' :
-				masM[object.coord[0]][object.coord[1]].style.backgroundColor ="rgb(28, 28, 28)";
+					masM[object.coord[0]][object.coord[1]].style.backgroundColor ="rgb(28, 28, 28)";
 				break;
 
 				case 'PLACE' :

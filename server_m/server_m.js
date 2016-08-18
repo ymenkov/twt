@@ -1,7 +1,4 @@
 function WORLD(){
-	// var throne=[];
-	// throne[0]=[5,0];
-	// throne[1]=[5,15];
 	var throne=[];
 	throne[0]={i:5,j:0};
 	throne[1]={i:5,j:15};
@@ -70,7 +67,7 @@ function WORLD(){
 					var finder = new PF.AStarFinder();
 
 					for (k=0;k<=all.length-1;k++){
-							if (all[k].type=="WALL"){
+							if ((all[k].type=="WALL") || ((all[k].type=="NOT"))){
 		  						grid.setWalkableAt(all[k].coord[0], all[k].coord[1], false);
 		  					}
 		   			}
@@ -172,6 +169,7 @@ function WORLD(){
 		id=id+1;
 		var newTower = new Tower(id,"TOWER",[i,j],false,1,2,10);
 		all.push(newTower);
+		all.push(new placeWall(id,"NOT",[i,j],false,false,false,false));
 		setInterval(newTower.shot.bind(newTower),1000);
 		}
 	}

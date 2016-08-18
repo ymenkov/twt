@@ -104,15 +104,15 @@ function VIEW(){
 
 	function renderAttackAnimation(type, from, to){
 		var shot=document.createElement('div');
-		shot.setCoordinate = function(x, y){
-			this.style.left = x*hw + x*marg + 'px';
-	 		this.style.top = y*hw + y*marg + 'px';
+		shot.setCoordinate = function(x,y){
+			this.style.left = y*hw + y*marg+20 + 'px';
+	 		this.style.top = x*hw + x*marg +25+ 'px';
 	 	}
 
 	 	var parent = document.getElementById('ololo');
-	 	parent.appendChild(shot).setCoordinate(from[0]-1, from[1]+1);
+	 	parent.appendChild(shot).setCoordinate(from[0], from[1]);
 
-	 	setTimeout(shot.setCoordinate.bind(shot, to[0]-1, to[1]+1), 100);
+	 	setTimeout(shot.setCoordinate.bind(shot, to[0], to[1]), 100);
 	 	setTimeout(parent.removeChild.bind(parent, shot), 1500);
 	}
 

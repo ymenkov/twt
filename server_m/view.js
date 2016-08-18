@@ -4,9 +4,10 @@ throne[0]={i:5,j:0};
 throne[1]={i:5,j:15};
 var hw=50;
 var marg=10;
-var player="Василий";
+var player="Валерий";
 var w = new WORLD();
-w.createPlayer(player, [7,7]);
+w.createPlayer(player, [5,0]);
+w.createPlayer("Инокентий", [10,15]);
 //w.createPlace();
 arrAll = w.getAll();
 
@@ -164,7 +165,8 @@ function VIEW(){
 				break;
 
 				case 'CASTLE':
-					masM[object.coord[0]][object.coord[1]].style.backgroundColor = "BLACK";
+					alert("da");
+					masM[object.coord[0]][object.coord[1]].style.backgroundColor = "black";
 				break;
 
 				default:

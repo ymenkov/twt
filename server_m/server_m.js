@@ -25,9 +25,11 @@ function WORLD(){
 		//this.createCastle(new_player.id, coordinate);
 		//var newCastle = new Castle(id,"CASTLE",coordinate,new_player.id,10);
 		//all.push(newCastle);
+		//		alert(new_player.id);
 		all.push(new Castle(id,"CASTLE",coordinate,new_player.id,10));
 		all[all.length-1].buildCastle();
 		this.start(new_player.id);
+
 
 	}
 
@@ -63,8 +65,8 @@ function WORLD(){
 
 	this.start = function(player_id){
 	//Старт таймера	
-	setInterval(function(){all.push(new information)}.bind(this),100);
-	setInterval(function(){createOrk(player_id);}.bind(this),2000);
+	//setInterval(function(){all.push(new information)}.bind(this),100);
+	setInterval(function(){createOrk(player_id);}.bind(this),5000);
 	}
 	
 	function information(){
@@ -194,7 +196,7 @@ function WORLD(){
 
 		this.shot = function(){
 			for (var i=0;i<=all.length-1;i++){
-	         	if 	((all[i].type=="ORK")&&(all[i].hp!="del")&&((Math.abs(all[i].coord[0]-this.coord[0]))<3)&&((Math.abs(all[i].coord[1]-this.coord[1]))<3))
+	         	if 	((all[i].type=="ORK")&&(all[i].hp!="del")&&((Math.abs(all[i].coord[0]-this.coord[0]))<3)&&((Math.abs(all[i].coord[1]-this.coord[1]))<3)&&(all[i].player_id!=this.player_id))
 	         	{
 	         		this.attackTarget=all[i].id;
 	         		all[i].hp=all[i].hp-this.damage;
@@ -214,7 +216,6 @@ function WORLD(){
 	}
 
 	function searchPlace(i,j,player_id){
-
 		for (var k=0;k<=all.length-1;k++){
 			if ((all[k].type=="PLACE") && (all[k].coord[0]==i)&&(all[k].coord[1]==j)&&(player_id==all[k].player_id)){
 				return true;

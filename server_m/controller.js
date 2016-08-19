@@ -6,7 +6,7 @@ function CONTROLLER(){
 			for (var i=0;i<=10;i++){
 				for (var j=0;j<=15;j++){
 					if (masM[i][j]==event.target) {
-							w.createWall(i,j,player);
+							w.createWall(i,j,player_id);
 					}
 				}
 
@@ -16,7 +16,7 @@ function CONTROLLER(){
 			for (var i=0;i<=10;i++){
 				for (var j=0;j<=15;j++){
 					if (masM[i][j]==event.target) {
-							w.createTower(i,j,player);
+							w.createTower(i,j,player_id);
 					}
 				}
 
@@ -27,7 +27,7 @@ function CONTROLLER(){
 			for (var i=0;i<=10;i++){
 				for (var j=0;j<=15;j++){
 					if (masM[i][j]==event.target) {
-							w.addPlace(i,j,player);
+							w.addPlace(i,j,player_id);
 					}
 				}
 

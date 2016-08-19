@@ -7,12 +7,11 @@ var marg=10;
 var player="Валерий";
 var w = new WORLD();
 w.createPlayer(player, [5,0]);
-var player_id=2;
+var player_id=0;
 w.createPlayer("Инокентий", [10,15]);
 w.createPlayer("Александр", [10,5]);
 //w.createPlace();
 arrAll = w.getAll();
-
 var c = new CONTROLLER();
 
 var masM = new Array(11);
@@ -134,7 +133,6 @@ function VIEW(){
 
 	this.objectInMap = function (){
 		arrAll = w.getAll();
-		console.dir(arrAll);
 		removeIfDie(arrAll, allObject);
 		arrAll.forEach(function(object){
 			switch (object.type){
@@ -149,27 +147,31 @@ function VIEW(){
 				break;
 
 				case 'INFO' :
-					var t = document.getElementById("Gold"); 
-					t.innerHTML = "Gold : "+object.gold;
-
-					t = document.getElementById("txt"); 
-					t.innerHTML = "Стенок осталось : "+object.wall;
-
-					t = document.getElementById("hp"); 
-					t.innerHTML = "Здоровье базы : "+object.hpBase;
-
-					t = document.getElementById("tower"); 
-					t.innerHTML = "Количество башен : "+object.tow;
-
-					t = document.getElementById("place"); 
-					t.innerHTML = "Количество блоков : "+object.place;
-
 				break;
 
 				case 'CASTLE':
 				masM[object.coord[0]][object.coord[1]].style.backgroundColor = "black";
 				//player_id=object.player_id;
 				//player_id=0;
+				//	console.log(object.id)
+					//console.log(player_id)
+					if (object.player_id==player_id){
+						
+						var t = document.getElementById("Gold"); 
+						t.innerHTML = "Gold : "+object.gold;
+
+						t = document.getElementById("txt"); 
+						t.innerHTML = "Стенок осталось : "+object.wall;
+
+						t = document.getElementById("hp"); 
+						t.innerHTML = "Здоровье базы : "+object.hp;
+
+						t = document.getElementById("tower"); 
+						t.innerHTML = "Количество башен : "+object.tow;
+
+						t = document.getElementById("place"); 
+						t.innerHTML = "Количество блоков : "+object.place;
+					}
 				break;
 
 				default:

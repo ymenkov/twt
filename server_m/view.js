@@ -9,6 +9,7 @@ var w = new WORLD();
 w.createPlayer(player, [5,0]);
 var player_id=1;
 w.createPlayer("Инокентий", [10,15]);
+w.createPlayer("Александр", [10,5]);
 //w.createPlace();
 arrAll = w.getAll();
 

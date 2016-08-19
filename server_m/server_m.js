@@ -26,6 +26,7 @@ function WORLD(){
 		//var newCastle = new Castle(id,"CASTLE",coordinate,new_player.id,10);
 		//all.push(newCastle);
 		//		alert(new_player.id);
+		id=id+1;
 		all.push(new Castle(id,"CASTLE",coordinate,new_player.id,10));
 		all[all.length-1].buildCastle();
 		this.start(new_player.id);

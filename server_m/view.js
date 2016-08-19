@@ -7,7 +7,7 @@ var marg=10;
 var player="Валерий";
 var w = new WORLD();
 w.createPlayer(player, [5,0]);
-var player_id=1;
+var player_id=2;
 w.createPlayer("Инокентий", [10,15]);
 w.createPlayer("Александр", [10,5]);
 //w.createPlace();

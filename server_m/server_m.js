@@ -140,11 +140,18 @@ function WORLD(){
 	}
 
 	function searchEnemy(player_id){
+		var k=searchPlayerCoord(player_id);
+		var m = k[0]+k[1];
+		var ch=1000;
 		for (var i=0;i<=players.length-1;i++){
 			if (players[i].id!=player_id){
-				return players[i].coord;
+				if (Math.abs(m-(players[i].coord[0]+players[i].coord[1]))<ch){
+					ch=Math.abs(m-(players[i].coord[0]+players[i].coord[1]));
+					k=i;
+				}
 			}
 		}
+		return players[k].coord;
 	}
 
 

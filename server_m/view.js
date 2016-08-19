@@ -122,11 +122,10 @@ function VIEW(){
 	function removeIfDie(arrAll, allObject){
 		allObject.forEach(function(elem, num){
 			for(var i=0; i<arrAll.length; i++){
-				if(arrAll[i].id == elem.internalId) 
+				if(arrAll[i].id == elem.internalId && arrAll[i].type == elem.type) 
 					return true;
 			}
 			if(elem.type == 'ORK'){
-				console.log('DELETE ORK' + elem.id);
 				elem.parentNode.removeChild(elem);
 				allObject.splice(num,1);
 			}

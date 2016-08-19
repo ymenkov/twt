@@ -43,6 +43,7 @@ function VIEW(){
 	var images = {
 		'ORK' : 'photo.jpg',
 		'TOWER' : 'tower.png',
+		'HUNTER': 'hunter.jpg'
 	};
 
 	this.render = function(){
@@ -133,6 +134,7 @@ function VIEW(){
 
 	this.objectInMap = function (){
 		arrAll = w.getAll();
+
 		removeIfDie(arrAll, allObject);
 		arrAll.forEach(function(object){
 			switch (object.type){
@@ -175,6 +177,7 @@ function VIEW(){
 				break;
 
 				default:
+					//if(object.type == 'HUNTER')alert(1111);
 					renderObject(object, images[object.type]);
 					if(object.attackTarget){
 						var target_obj = findObjectById(object.attackTarget);

@@ -99,8 +99,6 @@ function WORLD(){
 		
 	  	this.die = function(){
 	  		var k = searchCastle(this.enemy);
-	  		//alert(k)
-	  		console.log(all)
 	  		
 			if (this.hp<1){
 				all[k].gold=all[k].gold+1;

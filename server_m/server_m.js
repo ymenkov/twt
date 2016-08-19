@@ -153,20 +153,23 @@ function WORLD(){
 		  						grid.setWalkableAt(all[k].coord[0], all[k].coord[1], false);
 		  					}
 		   			}
-		   			alert(this.target);
-		   			//this.target = searchEnemyOrk(this.coord,this.player_id);
-		   				
-					var path = finder.findPath(this.target[0], this.target[1], this.coord[0], this.coord[1], grid);
+		   			var target1;
+		   			var seo = searchEnemyOrk(this.coord,this.player_id);
+		   			target1 = seo.coord;
+		   			//alert(target1)
+					var path = finder.findPath(target1[0], target1[1], this.coord[0], this.coord[1], grid);
 					var i=0;
 					path.forEach(function(c){
 						i++;
 					});
-					this.coord[0]=path[i-2][0];
-					this.coord[1]=path[i-2][1];
+					if (i>1){
+						this.coord[0]=path[i-2][0];
+						this.coord[1]=path[i-2][1];
+					}
 					flagCD=0;
-					if (((this.coord[0]==this.target[0]) && (this.coord[1]==this.target[1])) || (this.hp<1)){
-						//alert(123);
-						this.die.call(this);
+					if (((this.coord[0]==target1[0]) && (this.coord[1]==target1[1])) || (this.hp<1)){
+						seo.hp=seo.hp-1;
+						//this.die.call(this);
 					}
 					
 					} else {flagCD++;}
@@ -179,7 +182,7 @@ function WORLD(){
 			for (var i=0;i<=all.length-1;i++){
 	         	if 	((all[i].type=="ORK")&&(all[i].hp!="del")&&((Math.abs(all[i].coord[0]-this.coord[0]))<3)&&((Math.abs(all[i].coord[1]-this.coord[1]))<3)&&(all[i].player_id!=this.player_id))
 	         	{
-	         		alert(all[i].id)
+	         	//	alert(all[i].id)
 	         		this.attackTarget=all[i].id;
 	         		all[i].hp=all[i].hp-this.damage;
 	         		break;
@@ -190,17 +193,19 @@ function WORLD(){
 	}
 
 	function searchEnemyOrk(coord,player_id){
+		var k=0;
 		var m = coord[0]+coord[1];
 		var ch=1000;
 		for (var i=0;i<=all.length-1;i++){
-			if ((all[i].id!=player_id) &&(all[i].type=="ORK")){
+			if ((all[i].player_id!=player_id) &&(all[i].type=="ORK")&&(all[i].hp!="del")){
 				if (Math.abs(m-(all[i].coord[0]+all[i].coord[1]))<ch){
 					ch=Math.abs(m-(all[i].coord[0]+all[i].coord[1]));
 					k=i;
 				}
 			}
 		}
-		return all[k].coord;
+			alert(all[k].coord);
+		return all[k];
 	}
 
 	function searchPlayerCoord(player_id){
@@ -226,9 +231,9 @@ function WORLD(){
 		return players[k];
 	}
 
-	function createHunter(){
+	this.createHunter=function(player_id,coord){
 		id=id+1;
-		var newHunter = new OBJECT(id,"HUNTER",coord,false,false,10,5,player_id,false);
+		var newHunter = new OBJECT(id,"HUNTER",coord,false,false,3,5,player_id,false,false);
 		all.push(newHunter);
 		setInterval(newHunter.hunterAttack.bind(newHunter),100);
 	}
@@ -243,11 +248,8 @@ function WORLD(){
 		var newOrk = new OBJECT(id,"ORK",coord,target,false,6,5,player_id,enemy.id,false);
 		all.push(newOrk);
 		setInterval(newOrk.move.bind(newOrk),100);
-	//	createHunter(player_id,spc);
-
-		
-		
-		//Добавить орка в общий массив (id,координаты объекта, координаты цели, урон, кулдаун, hp)
+		//createHunter(player_id,coord);
+//Добавить орка в общий массив (id,координаты объекта, координаты цели, урон, кулдаун, hp)
 	}
 
 	function placeWall(id,type,coord,target,damage,coolDown,hp,player_id){

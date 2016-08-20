@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style.css">
+<script type="text/javascript" src="pathfinding-browser.js""></script>
+ <script src="server_m.js" defer></script>
+  <script src="controller.js" defer></script>
+ <script src="view.js" defer></script>
+</head>
+<body>
+<div id='test'></div>
+<input id="but" type="button" onclick="w.createHunter(0,[5,5])" value="Начать игру"/>
+<!-- <input id="buyTower" type="button" onclick="v.objectInMap();" value="Купить башню"/> -->
+<input id="putTower" type="button" onclick="statusController=1;" value="Поставить башню"/>
+<!-- <input id="buyPlace" type="button" onclick="buyPlace();" value="Купить место"/> -->
+<input id="putPlace" type="button" onclick="statusController=2;" value="Поставить место"/>
+<span id='Gold'>Gold : 20</span>
+<span id='tower'>Количество башен : 2</span>
+<span id='place'>Количество блоков : 2</span>
+<span id='txt'>Стенок осталось : 30</span>
+<span id='hp'>Здоровье базы : 10</span>
+<div id='pic'></div>
+<div id="ololo"></div>
+<select size='5'>
+  <option onclick="player_id=0;" value="volvo">Валерий</option>
+  <option onclick="player_id=1;" value="saab">Инокентий</option>
+  <option onclick="player_id=2;" value="saab">Александр</option>
+
+</select>
+</body>
+
+</html>

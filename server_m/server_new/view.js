@@ -9,7 +9,7 @@ var w = new WORLD();
 w.createPlayer(player, [5,0]);
 var player_id=0;
 w.createPlayer("Инокентий", [10,15]);
-w.createPlayer("Александр", [10,5]);
+w.createPlayer("Александр", [0,15]);
 //w.createPlace();
 arrAll = w.getAll();
 var c = new CONTROLLER();
@@ -153,6 +153,8 @@ function VIEW(){
 
 				case 'CASTLE':
 				masM[object.coord[0]][object.coord[1]].style.backgroundColor = "black";
+				
+			
 				//player_id=object.player_id;
 				//player_id=0;
 				//	console.log(object.id)

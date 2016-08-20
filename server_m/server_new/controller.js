@@ -16,7 +16,8 @@ function CONTROLLER(){
 			for (var i=0;i<=10;i++){
 				for (var j=0;j<=15;j++){
 					if (masM[i][j]==event.target) {
-							w.createTower(i,j,player_id);
+							//w.createTower(i,j,player_id);
+							w.createObject(player_id,"TOWER",[i,j]);
 					}
 				}
 

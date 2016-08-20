@@ -41,25 +41,25 @@ function WORLD(){
 	this.start = function(player_id){
 	//Старт таймера	
 	//setInterval(function(){all.push(new information)}.bind(this),100);
-	var jsonType = JSON.parse(data);
-		console.log(jsonType[0].name)
+	jsonType = JSON.parse(data);
+		console.log(jsonType[0].radiusAttack)
 	setInterval(function(){createOrk(player_id);}.bind(this),5000);
 	}
 	
 
 	function OBJECT(id,type,coord,target,damage,coolDown,hp,player_id,enemy,info,radiusAttack){
 		this.id=id;
-		this.type=type;
-		this.coord=coord;
-		this.target=target;
+		this.type=type; // тип объекта
+		this.coord=coord; // координаты объекта
+		this.target=target; // координаты цели
 		this.damage=damage;
 		this.coolDown=coolDown;
-		this.hp=hp;
+		this.hp=hp; // hp объекта
 		this.player_id=player_id;
-		this.enemy=enemy;
+		this.enemy=enemy; //id цели (использует для орков)
 		this.attackTarget; // указывается внутри функций
-		this.info=info;
-		this.radiusAttack=radiusAttack;
+		this.info=info; // info только у castle
+		this.radiusAttack=radiusAttack; //радиус выстрела
 		var flagCD=coolDown;
 		
 	  	this.die = function(){
@@ -105,7 +105,7 @@ function WORLD(){
 				}
 		}
 
-		this.hunterAttack = function (){
+		this.attackObject = function (){
 			if(this.hp!="del"){	
 		    	if (flagCD==this.coolDown){
 					var grid = new PF.Grid(fieldSize.heigth+1, fieldSize.width+1); 
@@ -132,9 +132,10 @@ function WORLD(){
 					}
 					flagCD=0;
 
-					if ((((Math.abs(this.coord[0]-target1[0]))<this.radiusAttack) && ((Math.abs(this.coord[1]-target1[1]))<this.radiusAttack)) || (this.hp<1)){
+					if ((((Math.abs(this.coord[0]-target1[0]))<=this.radiusAttack) && ((Math.abs(this.coord[1]-target1[1]))<=this.radiusAttack)) || (this.hp<1)){
 						this.attackTarget=seo.id;
 						seo.hp=seo.hp-this.damage;
+						alert(seo.hp);
 						//alert((Math.abs(this.coord[0]-target1[0])))
 						//this.die.call(this);
 					}
@@ -147,7 +148,7 @@ function WORLD(){
 		this.shot = function(){
 
 			for (var i=0;i<=all.length-1;i++){
-	         	if 	((all[i].type=="ORK")&&(all[i].hp!="del")&&((Math.abs(all[i].coord[0]-this.coord[0]))<3)&&((Math.abs(all[i].coord[1]-this.coord[1]))<3)&&(all[i].player_id!=this.player_id))
+	         	if 	((all[i].type=="ORK")&&(all[i].hp!="del")&&((Math.abs(all[i].coord[0]-this.coord[0]))<this.radiusAttack)&&((Math.abs(all[i].coord[1]-this.coord[1]))<this.radiusAttack)&&(all[i].player_id!=this.player_id))
 	         	{
 	         	//	alert(all[i].id)
 	         		this.attackTarget=all[i].id;
@@ -192,9 +193,9 @@ function WORLD(){
 
 	this.createHunter=function(player_id,coord){
 		id=id+1;
-		var newHunter = new OBJECT(id,"HUNTER",coord,false,1,3,5,player_id,false,false,3);
+		var newHunter = new OBJECT(id,"HUNTER",coord,false,1,3,5,player_id,false,false,1);
 		all.push(newHunter);
-		setInterval(newHunter.hunterAttack.bind(newHunter),100);
+		setInterval(newHunter.attackObject.bind(newHunter),100);
 	}
 
 
@@ -271,6 +272,30 @@ function WORLD(){
 			if ((all[k].player_id==player_id)&&(all[k].type=="CASTLE")){
 				return k;
 			}
+		}
+	}
+
+	function searchType(type){
+		for (var i=0;i<=jsonType.length-1;i++){
+			if (jsonType[i].type==type){
+				return jsonType[i];
+			}
+		}
+		return false;
+	}
+
+	this.createObject=function(player_id,type,coord){
+		var ko = searchType(type);
+		switch (ko.type){
+			case 'TOWER':
+			//	var newTower = new OBJECT(id,"TOWER",[i,j],false,1,6,10,player_id,false,false,false);
+				id=id+1; ko.id=id;
+				ko.player_id=player_id;
+				ko.coord=coord;
+				all.push(new OBJECT);
+			break;
+			default:
+			break;
 		}
 	}
 	

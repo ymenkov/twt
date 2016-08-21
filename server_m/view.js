@@ -68,10 +68,11 @@ function VIEW(){
 		}
 	}
 
-	function findObjectById(id){
+	function findObjectById(id, type){
 		for(var i=0; i<allObject.length;i++){
 			if(allObject[i].internalId == id)
-				return allObject[i];
+				if(!type || allObject[i].type == type)
+					return allObject[i];
 		}
 		return false;
 	}
@@ -86,7 +87,7 @@ function VIEW(){
 		hp_strike.innerHTML = '';
 
 		if(dom_element.hp){
-			var max_hp = 5; //TODO: need max hp fromserver
+			var max_hp = dom_element.max_hp; 
 			var hp = document.createElement('div');
 			hp.style.width=(dom_element.hp/max_hp)*hp_strike.clientWidth + 'px'; 
 			hp_strike.appendChild(hp);
@@ -94,7 +95,7 @@ function VIEW(){
 	}
 
 	function renderObject(object, image){
-		var renderElem = findObjectById(object.id); //ищем элемент среди созданных
+		var renderElem = findObjectById(object.id, object.type); //ищем элемент среди созданных
 		var x = object.coord[0];
 		var y = object.coord[1];
 		

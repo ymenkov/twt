@@ -46,6 +46,11 @@ function VIEW(){
 		'HUNTER': 'hunter.jpg'
 	};
 
+	var colors = [
+		'#4250CD', '#CD4742', '#CCCD42', '#CD42B3', '#42CCCD', 
+		'#42CD4E', '#FFFFFF', '#000000'
+	];
+
 	this.render = function(){
 		document.getElementById('test').innerHTML = "";
 		for (var i=0;i<=10;i++){
@@ -71,7 +76,7 @@ function VIEW(){
 	function findObjectById(id, type){
 		for(var i=0; i<allObject.length;i++){
 			if(allObject[i].internalId == id)
-				if(!type || allObject[i].type == type)
+				if(allObject[i].type == type)
 					return allObject[i];
 		}
 		return false;
@@ -89,9 +94,13 @@ function VIEW(){
 		if(dom_element.hp){
 			var max_hp = dom_element.max_hp; 
 			var hp = document.createElement('div');
-			hp.style.width=(dom_element.hp/max_hp)*hp_strike.clientWidth + 'px'; 
+			hp.style.width=((dom_element.hp/max_hp)*hp_strike.clientWidth).toFixed(0) + 'px'; 
 			hp_strike.appendChild(hp);
 		}
+	}
+
+	function generateColor(id){
+		return colors[id] || 'white';
 	}
 
 	function renderObject(object, image){
@@ -101,10 +110,16 @@ function VIEW(){
 		
 		if(!renderElem){ //Если элемент не создан - добавляем
 		 	renderElem = document.createElement('div');
+		 	renderElem.className = 'game-object';
 		 	renderElem.style.transition="all 1s";
 		 	renderElem.internalId = object.id;
 		 	renderElem.type=object.type;
 		 	renderElem.max_hp=object.hp;
+
+		 	if(object.player_id !== undefined){
+		 		renderElem.style.backgroundColor = generateColor(object.player_id);
+		 		renderElem.style.zIndex = 101;
+		 	}
 
 		 	document.getElementById('pic').appendChild(renderElem);
 			allObject.push(renderElem);
@@ -173,7 +188,7 @@ function VIEW(){
 				break;
 
 				case 'CASTLE':
-				masM[object.coord[0]][object.coord[1]].style.backgroundColor = "black";
+				masM[object.coord[0]][object.coord[1]].style.backgroundColor = generateColor(object.player_id);//"black";
 				//player_id=object.player_id;
 				//player_id=0;
 				//	console.log(object.id)
@@ -201,7 +216,7 @@ function VIEW(){
 					//if(object.type == 'HUNTER')alert(1111);
 					renderObject(object, images[object.type]);
 					if(object.attackTarget){
-						var target_obj = findObjectById(object.attackTarget);
+						var target_obj = findObjectById(object.attackTarget, 'ORK'); //TODO - need target ID from server
 						if(target_obj)
 							renderAttackAnimation(object.type, object.coord, target_obj.coord);
 					}

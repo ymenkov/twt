@@ -114,3 +114,16 @@ select {
 	left:1000px;
 	position: absolute;
 }
+
+.hp-strike {
+    width: 110%;
+    height: 4px;
+    bottom: -7px;
+    left: -6%;
+    border: 1px solid grey;
+}
+
+.hp-strike div{
+    background: #2dcf2d;
+    height: 100%;
+}

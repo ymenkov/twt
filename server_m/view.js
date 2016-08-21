@@ -76,6 +76,23 @@ function VIEW(){
 		return false;
 	}
 
+	function renderObjectHP(dom_element){
+		var hp_strike = dom_element.getElementsByClassName('hp-strike')[0];
+		if(!hp_strike){
+			hp_strike = document.createElement('div');
+			hp_strike.className='hp-strike';
+			dom_element.appendChild(hp_strike);
+		}
+		hp_strike.innerHTML = '';
+
+		if(dom_element.hp){
+			var max_hp = 5; //TODO: need max hp fromserver
+			var hp = document.createElement('div');
+			hp.style.width=(dom_element.hp/max_hp)*hp_strike.clientWidth + 'px'; 
+			hp_strike.appendChild(hp);
+		}
+	}
+
 	function renderObject(object, image){
 		var renderElem = findObjectById(object.id); //ищем элемент среди созданных
 		var x = object.coord[0];
@@ -86,6 +103,7 @@ function VIEW(){
 		 	renderElem.style.transition="all 1s";
 		 	renderElem.internalId = object.id;
 		 	renderElem.type=object.type;
+		 	renderElem.max_hp=object.hp;
 
 		 	document.getElementById('pic').appendChild(renderElem);
 			allObject.push(renderElem);
@@ -103,6 +121,8 @@ function VIEW(){
 		renderElem.coord = object.coord;
 		renderElem.style.left=(y*hw + marg*y) + 'px';
 		renderElem.style.top=(x*hw + marg*x) + 'px';
+
+		renderObjectHP(renderElem);
 	}
 
 	function renderAttackAnimation(type, from, to){

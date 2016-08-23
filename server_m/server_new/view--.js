@@ -9,7 +9,7 @@ var w = new WORLD();
 w.createPlayer(player, [5,0]);
 var player_id=0;
 w.createPlayer("Инокентий", [10,15]);
-w.createPlayer("Александр", [10,5]);
+w.createPlayer("Александр", [0,15]);
 //w.createPlace();
 arrAll = w.getAll();
 var c = new CONTROLLER();
@@ -43,14 +43,8 @@ function VIEW(){
 	var images = {
 		'ORK' : 'photo.jpg',
 		'TOWER' : 'tower.png',
-		'HUNTER': 'hunter.jpg',
-		'CASTLE' : 'castle.png'
+		'HUNTER': 'hunter.jpg'
 	};
-
-	var colors = [
-		'#4250CD', '#CD4742', '#CCCD42', '#CD42B3', '#42CCCD', 
-		'#42CD4E', '#FFFFFF', '#000000'
-	];
 
 	this.render = function(){
 		document.getElementById('test').innerHTML = "";
@@ -74,53 +68,24 @@ function VIEW(){
 		}
 	}
 
-	function findObjectById(id, type){
+	function findObjectById(id){
 		for(var i=0; i<allObject.length;i++){
 			if(allObject[i].internalId == id)
-				if(allObject[i].type == type)
-					return allObject[i];
+				return allObject[i];
 		}
 		return false;
 	}
 
-	function renderObjectHP(dom_element){
-		var hp_strike = dom_element.getElementsByClassName('hp-strike')[0];
-		if(!hp_strike){
-			hp_strike = document.createElement('div');
-			hp_strike.className='hp-strike';
-			dom_element.appendChild(hp_strike);
-		}
-		hp_strike.innerHTML = '';
-
-		if(dom_element.hp){
-			var max_hp = dom_element.max_hp; 
-			var hp = document.createElement('div');
-			hp.style.width=((dom_element.hp/max_hp)*hp_strike.clientWidth).toFixed(0) + 'px'; 
-			hp_strike.appendChild(hp);
-		}
-	}
-
-	function generateColor(id){
-		return colors[id] || 'white';
-	}
-
 	function renderObject(object, image){
-		var renderElem = findObjectById(object.id, object.type); //ищем элемент среди созданных
+		var renderElem = findObjectById(object.id); //ищем элемент среди созданных
 		var x = object.coord[0];
 		var y = object.coord[1];
 		
 		if(!renderElem){ //Если элемент не создан - добавляем
 		 	renderElem = document.createElement('div');
-		 	renderElem.className = 'game-object';
 		 	renderElem.style.transition="all 1s";
 		 	renderElem.internalId = object.id;
 		 	renderElem.type=object.type;
-		 	renderElem.max_hp=object.hp;
-
-		 	if(object.player_id !== undefined){
-		 		renderElem.style.backgroundColor = generateColor(object.player_id);
-		 		renderElem.style.zIndex = 101;
-		 	}
 
 		 	document.getElementById('pic').appendChild(renderElem);
 			allObject.push(renderElem);
@@ -138,8 +103,6 @@ function VIEW(){
 		renderElem.coord = object.coord;
 		renderElem.style.left=(y*hw + marg*y) + 'px';
 		renderElem.style.top=(x*hw + marg*x) + 'px';
-
-		renderObjectHP(renderElem);
 	}
 
 	function renderAttackAnimation(type, from, to){
@@ -189,7 +152,9 @@ function VIEW(){
 				break;
 
 				case 'CASTLE':
-				masM[object.coord[0]][object.coord[1]].style.backgroundColor = generateColor(object.player_id);//"black";
+				masM[object.coord[0]][object.coord[1]].style.backgroundColor = "black";
+				
+			
 				//player_id=object.player_id;
 				//player_id=0;
 				//	console.log(object.id)
@@ -211,13 +176,13 @@ function VIEW(){
 						t = document.getElementById("place"); 
 						t.innerHTML = "Количество блоков : "+object.info.place;
 					}
-				//break;
+				break;
 
 				default:
 					//if(object.type == 'HUNTER')alert(1111);
 					renderObject(object, images[object.type]);
 					if(object.attackTarget){
-						var target_obj = findObjectById(object.attackTarget, 'ORK'); //TODO - need target ID from server
+						var target_obj = findObjectById(object.attackTarget);
 						if(target_obj)
 							renderAttackAnimation(object.type, object.coord, target_obj.coord);
 					}

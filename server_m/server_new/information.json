@@ -1,0 +1,2 @@
+data ='[{"type":"TOWER","target":false,"damage" : 1,"coolDown" : 7,"hp" : 10,"enemy" : false,"info" : false,"radiusAttack" : 3}]';
+	

@@ -126,12 +126,6 @@ function World(width, height, gameObjects){
 
 				delete attackTargets;
 
-
-
-
-
-
-
 			}
 
 
@@ -149,7 +143,7 @@ function World(width, height, gameObjects){
 				return false;
 			})
 
-			return targets.slice(0,targetNumb-1);
+			return targets.slice(0,targetNumb);
 		}
 	}
 

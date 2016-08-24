@@ -14,9 +14,25 @@ function GameMap(width, height){
 		
 	}
 
-	me.findPathToCoordinate = function(from, to){
+	function findObjectsInArray(array, param, value){
+		var reaz = [];
+		for(var i=0; i<array.length; i++)
+			if(array[i][param]==value)
+				reaz.push(array[i]);
+		return reaz;
+	}
+
+	me.findPathToCoordinate = function(from, to,all_obj){
+
 		var grid = new PF.Grid(me.width, me.height); 
 		var finder = new PF.AStarFinder();
+
+		var objects = findObjectsInArray(all_obj, 'moveTargets', false);
+		objects.forEach(function(obj){ 
+			if(obj)
+			grid.setWalkableAt(obj.coord[0], obj.coord[1], false);
+		});
+
 		return finder.findPath(from[0], from[1], to[0], to[1], grid);
 	}
 
@@ -25,6 +41,6 @@ function GameMap(width, height){
 	}
 
 	me.checkPointToFree = function(coordinate){
-		
+		return true;
 	}
 }

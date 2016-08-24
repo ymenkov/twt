@@ -83,7 +83,7 @@ function World(width, height, gameObjects){
 		this.playerId = playerId;
 
 		this.hp=config.hp;
-		this.moveTargets=config.moveTargets || [];
+		this.moveTargets=config.moveTargets;
 		this.attackTargets=config.attackTargets || [];
 		this.damage=config.damage;
 		this.moveSpeed=config.moveSpeed;
@@ -95,6 +95,7 @@ function World(width, height, gameObjects){
 		this.moveCoolDown = (1000/this.moveSpeed).toFixed(0);
 
 		this.move = function(all_obj){
+			if(!this.moveTargets) return;
 			var gameObj = this;
 			this.moveCoolDown -= 100;
 			if(!this.moveCoolDown){
@@ -103,7 +104,7 @@ function World(width, height, gameObjects){
 				var targets = this.getMoveTargets(all_obj);
 				if(targets.length){
 					targets = targets.map(function(t){ 
-						return { coord: t.coord, path: me.gameMap.findPathToCoordinate(gameObj.coord, t.coord)} 
+						return { coord: t.coord, path: me.gameMap.findPathToCoordinate(gameObj.coord, t.coord,all_obj)} 
 					});
 					targets.sort(function(a,b){ return a.path.length > b.path.length });
 					

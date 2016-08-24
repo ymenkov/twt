@@ -34,9 +34,7 @@ function World(width, height, gameObjects){
 	me.gameMap = new GameMap(width, height);
 
 	me.getAll = function(){
-		return all_obj
-			.filter(function(obj){ return obj.hp != 'del' })
-			.map(function(obj){ 
+		return all_obj.filter(function(obj){ return obj.hp != 'del' }).map(function(obj){ 
 				return {
 					type: obj.type,
 					id: obj.id,
@@ -114,12 +112,44 @@ function World(width, height, gameObjects){
 			return targets;	
 		}
 
-		this.attack = function(){
+		this.attack = function(all_obj){
+			var gameObj = this;
+				this.moveCoolDown -= 100;
+			if(!this.moveCoolDown){
+				this.moveCoolDown = (1000/this.moveSpeed).toFixed(0);
+				var attackTargets=getAttackTarget(all_obj,gameObj.attackType,this.attackRadius,1,gameObj.coord);
+				attackTargets.forEach(function(target){
+					target.hp-=gameObj.damage;
+					if (gameObj.hp<=0){gameObj.hp="del";}
+				});
+
+
+				delete attackTargets;
+
+
+
+
+
+
+
+			}
+
 
 		}
 
-		this.getAttackTarget = function(){
-			
+		this.getAttackTarget = function(all_obj,attackTypes,radius,targetNumb,coord){
+			targets = all_obj.filter(function(target){
+				return ~attackTypes.indexOf(target.type);
+			})
+
+			targets = targets.filter(function(target){
+				if ((Math.abs(target.coord[0]-coord[0]))<radius)&&((Math.abs(target.coord[1]-coord[1]))<radius){
+					return true;
+				}
+				return false;
+			})
+
+			return targets.slice(0,targetNumb-1);
 		}
 	}
 

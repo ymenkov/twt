@@ -5,7 +5,11 @@ throne[1]={i:5,j:15};
 var hw=50;
 var marg=10;
 var player="Валерий";
-var w = new World();
+
+var w = new World(30,30, gameObjects);
+w.startWorld();
+w.createObject('CASTLE', 0, [1,1]);
+
 w.createPlayer(player, [5,0]);
 var player_id=0;
 w.createPlayer("Инокентий", [10,15]);

@@ -1,0 +1,21 @@
+[{
+	"type": "CASTLE",
+	"hp": 1000,
+	"price": 1000,
+	"moveTargets": false,
+	"attackTargets": ["ORK", "HUNTER"],
+	"damage": 20,
+	"moveSpeed": 0,
+	"attackSpeed": 1,
+	"attackRadius": 4
+}, {
+	"type": "ORK",
+	"hp": 100,
+	"price": 100,
+	"moveTargets": ["CASTLE", "HUNTER"],
+	"attackTargets": ["CASTLE", "HUNTER"],
+	"damage": 20,
+	"moveSpeed": 1,
+	"attackSpeed": 1,
+	"attackRadius": 1
+}]

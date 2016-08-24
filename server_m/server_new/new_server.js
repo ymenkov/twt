@@ -1,4 +1,3 @@
-
 var gameObjects = [{
 	"type": "CASTLE",
 	"hp": 1000,
@@ -31,8 +30,7 @@ function World(width, height, gameObjects){
 	var id = 0;
 
 	me.gameObjects = gameObjects;
-	me.worldWidth = width;
-	me.worldHeight = height;
+	me.gameMap = new GameMap(width, height);
 
 	me.getAll = function(){
 		return all_obj
@@ -43,7 +41,8 @@ function World(width, height, gameObjects){
 					coord: obj.coord,
 					playerId: obj.playerId,
 					hp: obj.hp,
-					attackTarget: obj.attackTarget
+					attackTarget: obj.attackTarget,
+					moveAnimation: obj.moveAnimation
 				} 
 			});
 	}
@@ -64,7 +63,7 @@ function World(width, height, gameObjects){
 		}; 
 		
 		players.push(new_player);
-		me.createObject('CASTLE', new_player.id, coordinate).buildCastle();
+		me.createObject('CASTLE', new_player.id, coordinate);
 	};	
 
 	function gameObject(id, type, playerId, coordinate, config){
@@ -86,19 +85,21 @@ function World(width, height, gameObjects){
 		this.moveCoolDown = (1000/this.moveSpeed).toFixed(0);
 
 		this.move = function(all_obj){
+			var gameObj = this;
 			this.moveCoolDown -= 100;
 			if(!this.moveCoolDown){
 				this.moveCoolDown = (1000/this.moveSpeed).toFixed(0);
 
 				var targets = this.getMoveTargets(all_obj);
-				if(new_targets.length){
+				if(targets.length){
 					targets = targets.map(function(t){ 
-						return { coord: t.coord, path: ux.findPathToCoordinate(this.coord, t.coord)} 
+						return { coord: t.coord, path: me.gameMap.findPathToCoordinate(gameObj.coord, t.coord)} 
 					});
 					targets.sort(function(a,b){ return a.path.length > b.path.length });
 					
-					this.coord = targets[0].path.[1];
-					remove targets;
+					this.moveAnimation = [ this.coord, targets[0].path[1] ];
+					this.coord = targets[0].path[1] || targets[0].path[0];
+					delete targets;
 				}
 			}
 		}
@@ -106,8 +107,8 @@ function World(width, height, gameObjects){
 		this.getMoveTargets = function(all_obj){
 			var targets = [];
 			for(var i =0; i<all_obj.length; i++)
-				if(~this.moveTargets.indexOf(all_obj[i].type))
-					targets.push({ coord: all_obj[i].coordinate });
+				if(~this.moveTargets.indexOf(all_obj[i].type) && this.playerId != all_obj[i].playerId)
+					targets.push({ coord: all_obj[i].coord });
 			return targets;	
 		}
 
@@ -120,15 +121,19 @@ function World(width, height, gameObjects){
 		}
 	}
 
-	function findConfigInGameObjects(type){
-		for(var i=0; i<me.gameObjects.length; i++)
-			if(me.gameObjects[i].type==type)
-				return me.gameObjects[i];
-		return false;
-	}
+	me.buyObject = function(type, playerId, coordinate){ 
+		var config = findObjectInArray(gameObjects, 'type', type);
+		var player = findObjectInArray(players, 'id', playerId);
+		if( config && player && gameMap.checkPointToFree(coordinate) ){
+			if(player.gold >= config.price){
+				player.gold -= config.price;
+				me.createObject(type, playerId, coordinate, config);
+			}
+		}
+	};
 
-	me.createObject = function(type, playerId, coordinate){ 
-		var config = findConfigInGameObjects(type);
+	me.createObject = function(type, playerId, coordinate, conf){ 
+		var config = conf || findObjectInArray(gameObjects, 'type', type);
 		if(config){
 			var new_obj = all_obj.push(new gameObject(++id, type, playerId, coordinate, config));
 			return new_obj;
@@ -138,8 +143,8 @@ function World(width, height, gameObjects){
 
 	function worldInterval(){
 		all_obj.forEach(function(game_Object){
-			game_Object.move(all_obj);
-			game_Object.attack(all_obj);
+			game_Object.move.call(game_Object, all_obj);
+			game_Object.attack.call(game_Object, all_obj);
 		});
 	}
 
@@ -149,6 +154,16 @@ function World(width, height, gameObjects){
 
 	me.pauseWorld = function(){
 		clearInterval(timerId);
+	}
+
+	/////////////////////////
+	// other functions
+
+	function findObjectInArray(array, param, value){
+		for(var i=0; i<array.length; i++)
+			if(array[i][param]==value)
+				return array[i];
+		return false;
 	}
 }
 

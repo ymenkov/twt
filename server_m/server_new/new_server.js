@@ -103,6 +103,7 @@ function World(width, height, gameObjects){
 				}
 			}
 		}
+		
 
 		this.getMoveTargets = function(all_obj){
 			var targets = [];

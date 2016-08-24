@@ -114,13 +114,13 @@ function World(width, height, gameObjects){
 
 		this.attack = function(all_obj){
 			var gameObj = this;
-				this.moveCoolDown -= 100;
-			if(!this.moveCoolDown){
-				this.moveCoolDown = (1000/this.moveSpeed).toFixed(0);
+				this.attackCoolDown -= 100;
+			if(!this.attackCoolDown){
+				this.attackCoolDown = (1000/this.attackCoolDown).toFixed(0);
 				var attackTargets=getAttackTarget(all_obj,gameObj.attackType,this.attackRadius,1,gameObj.coord);
 				attackTargets.forEach(function(target){
 					target.hp-=gameObj.damage;
-					if (gameObj.hp<=0){gameObj.hp="del";}
+					if (target.hp<=0){target.hp="del";}
 				});
 
 
@@ -143,7 +143,7 @@ function World(width, height, gameObjects){
 				return false;
 			})
 
-			return targets.slice(0,targetNumb);
+			return targets.splice(targetNumb,targets.length-targetNumb); 
 		}
 	}
 

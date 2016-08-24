@@ -194,7 +194,8 @@ function VIEW(){
 				break;
 
 				case 'CASTLE':
-				masM[object.coord[0]][object.coord[1]].style.backgroundColor = generateColor(object.player_id);//"black";
+					masM[object.coord[0]][object.coord[1]].style.backgroundColor = generateColor(object.player_id);//"black";
+					return;
 				//player_id=object.player_id;
 				//player_id=0;
 				//	console.log(object.id)

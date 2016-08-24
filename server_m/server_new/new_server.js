@@ -26,6 +26,7 @@ function World(width, height, gameObjects){
 
 	var all_obj = [];
 	var players = [];
+	var playerId = 0;
 	var timerId = null;
 	var id = 0;
 
@@ -37,9 +38,10 @@ function World(width, height, gameObjects){
 			.filter(function(obj){ return obj.hp != 'del' })
 			.map(function(obj){ 
 				return {
+					type: obj.type,
 					id: obj.id,
 					coord: obj.coord,
-					playerId: obj.playerId,
+					player_id: obj.playerId,
 					hp: obj.hp,
 					attackTarget: obj.attackTarget,
 					moveAnimation: obj.moveAnimation
@@ -53,7 +55,7 @@ function World(width, height, gameObjects){
 		var new_player = {
 			type: "PLAYER",
 			die: false,
-			id: id++,
+			id: playerId++,
 			name: name,
 			coord:coordinate,
 			tow:2,

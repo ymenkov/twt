@@ -10,11 +10,11 @@ var gameObjects = [{
 	"attackRadius": 4
 }, {
 	"type": "ORK",
-	"hp": 100,
+	"hp": 1000,
 	"price": 100,
 	"moveTargets": ["CASTLE", "HUNTER"],
 	"attackTargets": ["CASTLE", "HUNTER"],
-	"damage": 20,
+	"damage": 100,
 	"moveSpeed": 1,
 	"attackSpeed": 1,
 	"attackRadius": 1
@@ -108,16 +108,19 @@ function World(width, height, gameObjects){
 			var targets = [];
 			for(var i =0; i<all_obj.length; i++)
 				if(~this.moveTargets.indexOf(all_obj[i].type) && this.playerId != all_obj[i].playerId)
-					targets.push({ coord: all_obj[i].coord });
-			return targets;	
+					targets.push({ coord: all_obj[i].coord, hp: all_obj[i].hp });
+			return targets.filter(function(target){
+				return target.hp!="del";
+			});	
 		}
 
 		this.attack = function(all_obj){
 			var gameObj = this;
 				this.attackCoolDown -= 100;
 			if(!this.attackCoolDown){
-				this.attackCoolDown = (1000/this.attackCoolDown).toFixed(0);
-				var attackTargets=getAttackTarget(all_obj,gameObj.attackType,this.attackRadius,1,gameObj.coord);
+				this.attackCoolDown = (1000/this.attackSpeed).toFixed(0);
+				var attackTargets=gameObj.getAttackTarget(all_obj,gameObj.attackTargets,gameObj.attackRadius,1,gameObj.coord);
+			
 				attackTargets.forEach(function(target){
 					target.hp-=gameObj.damage;
 					if (target.hp<=0){target.hp="del";}
@@ -137,13 +140,17 @@ function World(width, height, gameObjects){
 			})
 
 			targets = targets.filter(function(target){
-				if ((Math.abs(target.coord[0]-coord[0]))<radius)&&((Math.abs(target.coord[1]-coord[1]))<radius){
+				if (((Math.abs(target.coord[0]-coord[0]))<radius)&&((Math.abs(target.coord[1]-coord[1]))<radius)){
 					return true;
 				}
 				return false;
 			})
 
-			return targets.splice(targetNumb,targets.length-targetNumb); 
+			targets = targets.filter(function(target){
+				return target.hp!="del";
+			})
+
+			return targets.slice(0,targetNumb); 
 		}
 	}
 
@@ -169,8 +176,10 @@ function World(width, height, gameObjects){
 
 	function worldInterval(){
 		all_obj.forEach(function(game_Object){
-			game_Object.move.call(game_Object, all_obj);
-			game_Object.attack.call(game_Object, all_obj);
+			if(game_Object.hp!='del'){
+				game_Object.move.call(game_Object, all_obj);
+				game_Object.attack.call(game_Object, all_obj);
+			}
 		});
 	}
 

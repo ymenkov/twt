@@ -25,6 +25,6 @@ function GameMap(width, height){
 	}
 
 	me.checkPointToFree = function(coordinate){
-
+		
 	}
 }

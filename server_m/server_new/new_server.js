@@ -18,6 +18,16 @@ var gameObjects = [{
 	"moveSpeed": 1,
 	"attackSpeed": 1,
 	"attackRadius": 2
+}, {
+	"type": "TOWER",
+	"hp": 1000,
+	"price": 100,
+	"moveTargets": false,
+	"attackTargets": ["CASTLE", "ORK"],
+	"damage": 100,
+	"moveSpeed": 1,
+	"attackSpeed": 1,
+	"attackRadius": 4
 }];
 
 function World(width, height, gameObjects){
@@ -59,7 +69,7 @@ function World(width, height, gameObjects){
 			tow:2,
 			place:2,
 			wall:3,
-			gold:20
+			gold:200000
 		}; 
 		
 		players.push(new_player);
@@ -103,7 +113,7 @@ function World(width, height, gameObjects){
 				}
 			}
 		}
-		
+
 
 		this.getMoveTargets = function(all_obj){
 			var targets = [];
@@ -156,7 +166,7 @@ function World(width, height, gameObjects){
 	me.buyObject = function(type, playerId, coordinate){ 
 		var config = findObjectInArray(gameObjects, 'type', type);
 		var player = findObjectInArray(players, 'id', playerId);
-		if( config && player && gameMap.checkPointToFree(coordinate) ){
+		if( config && player && me.gameMap.checkPointToFree(coordinate) ){
 			if(player.gold >= config.price){
 				player.gold -= config.price;
 				me.createObject(type, playerId, coordinate, config);

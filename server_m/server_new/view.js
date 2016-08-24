@@ -12,7 +12,7 @@ w.startWorld();
 w.createPlayer(player, [0,0]);
 w.createObject('ORK', 0, [1,1]);
 
-var player_id=0;
+var player_id=1;
 w.createPlayer("Инокентий", [10,15]);
 w.createPlayer("Александр", [10,5]);
 //w.createPlace();
@@ -198,7 +198,6 @@ function VIEW(){
 	
 
 				default:
-					//if(object.type == 'HUNTER')alert(1111);
 					renderObject(object, images[object.type]);
 					if(object.attackTarget){
 						var target_obj = findObjectById(object.attackTarget, 'ORK'); //TODO - need target ID from server
@@ -207,12 +206,7 @@ function VIEW(){
 					}
 					break;
 			}
-			// if (object.type=="WALL"){
-			// 	masM[object.coord[0]][object.coord[1]].style.backgroundColor ="rgb(28, 28, 28)";
-			// } else {
-			// 	console.log(object.type);
-			// renderObject(object, images[object.type]);
-			// }
+
 		});	
 	}
 

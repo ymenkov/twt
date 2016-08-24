@@ -195,29 +195,7 @@ function VIEW(){
 
 				case 'CASTLE':
 					masM[object.coord[0]][object.coord[1]].style.backgroundColor = generateColor(object.player_id);//"black";
-					return;
-				//player_id=object.player_id;
-				//player_id=0;
-				//	console.log(object.id)
-					//console.log(player_id)
-					if (object.player_id==player_id){
-						
-						var t = document.getElementById("Gold"); 
-						t.innerHTML = "Gold : "+object.info.gold;
-
-						t = document.getElementById("txt"); 
-						t.innerHTML = "Стенок осталось : "+object.info.wall;
-
-						t = document.getElementById("hp"); 
-						t.innerHTML = "Здоровье базы : "+object.hp;
-
-						t = document.getElementById("tower"); 
-						t.innerHTML = "Количество башен : "+object.info.tow;
-
-						t = document.getElementById("place"); 
-						t.innerHTML = "Количество блоков : "+object.info.place;
-					}
-				//break;
+	
 
 				default:
 					//if(object.type == 'HUNTER')alert(1111);

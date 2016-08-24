@@ -17,7 +17,7 @@ var gameObjects = [{
 	"damage": 100,
 	"moveSpeed": 1,
 	"attackSpeed": 1,
-	"attackRadius": 1
+	"attackRadius": 2
 }];
 
 function World(width, height, gameObjects){
@@ -125,8 +125,6 @@ function World(width, height, gameObjects){
 					target.hp-=gameObj.damage;
 					if (target.hp<=0){target.hp="del";}
 				});
-
-
 				delete attackTargets;
 
 			}

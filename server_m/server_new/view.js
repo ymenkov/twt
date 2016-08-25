@@ -10,7 +10,7 @@ var w = new World(11,16, gameObjects);
 w.startWorld();
 
 w.createPlayer(player, [0,0]);
-w.createObject('ORK', 0, [1,1]);
+//w.createObject('ORK', 0, [1,1]);
 
 var player_id=0;
 w.createPlayer("Инокентий", [10,15]);
@@ -167,19 +167,24 @@ function VIEW(){
 				if(arrAll[i].id == elem.internalId && arrAll[i].type == elem.type) 
 					return true;
 			}
-			if(elem.type == 'ORK'){
+			//f(elem.type == 'ORK'){
 				elem.parentNode.removeChild(elem);
 				allObject.splice(num,1);
-			}
+			//}
 		});
 	}
 
 	this.objectInMap = function (){
-		arrAll = w.getAll();
+		arrAll = w.getAll(player_id);
 
 		removeIfDie(arrAll, allObject);
 		arrAll.forEach(function(object){
 			switch (object.type){
+				case 'PLAYER':
+					var t = document.getElementById("Gold"); 
+					t.innerHTML = "Gold : "+object.gold;
+				break;
+
 				case 'WALL' :
 				//	masM[object.coord[0]][object.coord[1]].style.backgroundColor ="rgb(28, 28, 28)";
 					rendO();

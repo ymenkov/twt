@@ -8,7 +8,8 @@ var gameObjects = [{
 	"moveSpeed": 0,
 	"attackSpeed": 1,
 	"attackRadius": 4,
-	"block": true
+	"block": true,
+	"spawnInterval": 30
 }, {
 	"type": "ORK",
 	"hp": 1000,
@@ -75,12 +76,14 @@ function World(width, height, gameObjects){
 	var playerId = 0;
 	var timerId = null;
 	var id = 0;
+	var thrones=[[2,2],[8,2],[2,13],[8,13]]
 
 	me.gameObjects = gameObjects;
 	me.gameMap = new GameMap(width, height);
 
-	me.getAll = function(){
-		return all_obj.filter(function(obj){ return obj.hp != 'del' }).map(function(obj){ 
+	me.getAll = function(playerid){
+		var gold= findObjectInArray(players, 'id', playerid).gold;
+		var rez= all_obj.filter(function(obj){ return obj.hp != 'del' }).map(function(obj){ 
 				return {
 					type: obj.type,
 					id: obj.id,
@@ -90,7 +93,14 @@ function World(width, height, gameObjects){
 					attackTarget: obj.attackTarget,
 					moveAnimation: obj.moveAnimation
 				} 
+			})
+
+		rez.push({
+				type: 'PLAYER',
+				gold: gold
 			});
+
+		return rez;
 	}
 
 	me.getPlayers = function(){ return players }
@@ -109,9 +119,8 @@ function World(width, height, gameObjects){
 		}; 
 		
 		players.push(new_player);
-		me.createObject('CASTLE', new_player.id, coordinate);
-		this.buildCastle(coordinate,new_player.id);
-		//alert(new_player.id)
+		me.createObject('CASTLE', new_player.id, thrones[new_player.id]);
+		this.buildCastle(thrones[new_player.id],new_player.id);
 	};	
 
 	this.buildCastle=function(coord,player_id){
@@ -125,6 +134,18 @@ function World(width, height, gameObjects){
 					}
 				}
 			}	
+	}
+
+
+
+	me.createOrks=function(player_id){
+		this.spawn -= 100;
+		if(!this.spawn){
+			this.spawn = this.spawnInterval*100;
+			var config = findObjectInArray(gameObjects, 'type', "ORK");
+			me.createObject("ORK", player_id, thrones[player_id], config);
+			cooldSpawnOrks=0;
+		}
 	}
 
 	function gameObject(id, type, playerId, coordinate, config){
@@ -142,6 +163,7 @@ function World(width, height, gameObjects){
 		this.attackRadius = config.attackRadius;
 		this.attackTarget = false;
 		this.block=config.block;
+		this.spawnInterval = config.spawnInterval || 0;
 
 		this.attackCoolDown = (1000/this.attackSpeed).toFixed(0);
 		this.moveCoolDown = (1000/this.moveSpeed).toFixed(0);
@@ -251,6 +273,11 @@ function World(width, height, gameObjects){
 			if(game_Object.hp!='del'){
 				game_Object.move.call(game_Object, all_obj);
 				game_Object.attack.call(game_Object, all_obj);
+
+				if (game_Object.type=="CASTLE"){
+					me.createOrks.call(game_Object, game_Object.playerId);
+				} 
+
 			}
 		});
 	}

@@ -12,8 +12,8 @@ var gameObjects = [{
 	"type": "ORK",
 	"hp": 1000,
 	"price": 100,
-	"moveTargets": ["CASTLE", "HUNTER"],
-	"attackTargets": ["CASTLE", "HUNTER"],
+	"moveTargets": ["TOWER","CASTLE", "HUNTER"],
+	"attackTargets": ["TOWER","CASTLE", "HUNTER"],
 	"damage": 100,
 	"moveSpeed": 1,
 	"attackSpeed": 1,
@@ -108,8 +108,13 @@ function World(width, height, gameObjects){
 					});
 					targets.sort(function(a,b){ return a.path.length > b.path.length });
 					
-					this.moveAnimation = [ this.coord, targets[0].path[1] ];
-					this.coord = targets[0].path[1] || targets[0].path[0];
+					if(targets[0].path.length>2) //TODO - надо подумать как сделать красивее
+						var newCoordinate = targets[0].path[1];
+					else
+						var newCoordinate = this.coord;
+
+					this.moveAnimation = [ this.coord, newCoordinate ];
+					this.coord = newCoordinate;
 					delete targets;
 				}
 			}
@@ -135,6 +140,7 @@ function World(width, height, gameObjects){
 			
 				attackTargets.forEach(function(target){
 					target.hp-=gameObj.damage;
+					gameObj.attackTarget = target.id;
 					if (target.hp<=0){target.hp="del";}
 				});
 				delete attackTargets;
@@ -145,6 +151,7 @@ function World(width, height, gameObjects){
 		}
 
 		this.getAttackTarget = function(all_obj,attackTypes,radius,targetNumb,coord){
+			var gameObj = this;
 			targets = all_obj.filter(function(target){
 				return ~attackTypes.indexOf(target.type);
 			})
@@ -157,7 +164,7 @@ function World(width, height, gameObjects){
 			})
 
 			targets = targets.filter(function(target){
-				return target.hp!="del";
+				return target.hp!="del" && target.playerId!=gameObj.playerId;
 			})
 
 			return targets.slice(0,targetNumb); 

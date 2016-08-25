@@ -29,8 +29,8 @@ function GameMap(width, height){
 
 		var objects = findObjectsInArray(all_obj, 'moveTargets', false);
 		objects.forEach(function(obj){ 
-			if(obj)
-			grid.setWalkableAt(obj.coord[0], obj.coord[1], false);
+			if(obj && obj.coord != to )
+				grid.setWalkableAt(obj.coord[0], obj.coord[1], false);
 		});
 
 		return finder.findPath(from[0], from[1], to[0], to[1], grid);

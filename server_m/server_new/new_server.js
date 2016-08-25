@@ -7,7 +7,8 @@ var gameObjects = [{
 	"damage": 20,
 	"moveSpeed": 0,
 	"attackSpeed": 1,
-	"attackRadius": 4
+	"attackRadius": 4,
+	"block": true
 }, {
 	"type": "ORK",
 	"hp": 1000,
@@ -17,7 +18,8 @@ var gameObjects = [{
 	"damage": 100,
 	"moveSpeed": 1,
 	"attackSpeed": 1,
-	"attackRadius": 2
+	"attackRadius": 2,
+	"block": false
 }, {
 	"type": "TOWER",
 	"hp": 1000,
@@ -27,7 +29,30 @@ var gameObjects = [{
 	"damage": 100,
 	"moveSpeed": 1,
 	"attackSpeed": 1,
-	"attackRadius": 4
+	"attackRadius": 4,
+	"block": true
+},{
+	"type": "PLACE",
+	"hp": 1,
+	"price": 100,
+	"moveTargets": false,
+	"attackTargets": [],
+	"damage": 0,
+	"moveSpeed": 0,
+	"attackSpeed": 0,
+	"attackRadius": 0,
+	"block": false
+},{
+	"type": "WALL",
+	"hp": 1000,
+	"price": 100,
+	"moveTargets": false,
+	"attackTargets": [],
+	"damage": 0,
+	"moveSpeed": 0,
+	"attackSpeed": 0,
+	"attackRadius": 0,
+	"block": false
 }];
 
 function World(width, height, gameObjects){
@@ -69,12 +94,13 @@ function World(width, height, gameObjects){
 			tow:2,
 			place:2,
 			wall:3,
-			gold:200000
+			gold:1000
 		}; 
 		
 		players.push(new_player);
 		me.createObject('CASTLE', new_player.id, coordinate);
 	};	
+
 
 	function gameObject(id, type, playerId, coordinate, config){
 		this.id=id;
@@ -90,6 +116,7 @@ function World(width, height, gameObjects){
 		this.attackSpeed=config.attackSpeed;
 		this.attackRadius = config.attackRadius;
 		this.attackTarget = false;
+		this.block=config.block;
 
 		this.attackCoolDown = (1000/this.attackSpeed).toFixed(0);
 		this.moveCoolDown = (1000/this.moveSpeed).toFixed(0);

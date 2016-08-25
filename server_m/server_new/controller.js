@@ -7,7 +7,7 @@ function CONTROLLER(){
 				for (var j=0;j<=15;j++){
 					if (masM[i][j]==event.target) {
 							//w.createObject(player_id,"WALL",[i,j]);
-
+								w.buyObject("WALL",player_id,[i,j]);
 					}
 				}
 
@@ -29,7 +29,8 @@ function CONTROLLER(){
 			for (var i=0;i<=10;i++){
 				for (var j=0;j<=15;j++){
 					if (masM[i][j]==event.target) {
-							w.addPlace(i,j,player_id);
+							//w.addPlace(i,j,player_id);
+							w.buyObject("PLACE",player_id,[i,j]);
 					}
 				}
 

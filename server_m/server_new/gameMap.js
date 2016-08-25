@@ -27,7 +27,7 @@ function GameMap(width, height){
 		var grid = new PF.Grid(me.width, me.height); 
 		var finder = new PF.AStarFinder();
 
-		var objects = findObjectsInArray(all_obj, 'moveTargets', false);
+		var objects = findObjectsInArray(all_obj, 'block', true);
 		objects.forEach(function(obj){ 
 			if(obj && obj.coord != to )
 				grid.setWalkableAt(obj.coord[0], obj.coord[1], false);

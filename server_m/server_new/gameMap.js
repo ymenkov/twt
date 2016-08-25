@@ -53,20 +53,23 @@ function GameMap(width, height){
 
 	me.checkPointToFree = function(coord,all_obj,config_block,type,player_id){
 		var i = coord[0]; var j = coord[1];
-		if ((type=="PLACE")&&(((j>0)&&(me.searchPlace(i,j-1,player_id,all_obj)))||((i>0)&&(me.searchPlace(i-1,j,player_id,all_obj)))||((j<15)&&(me.searchPlace(i,j+1,player_id,all_obj)))||((i<10)&&(me.searchPlace(i+1,j,player_id,all_obj))))){		
+		if ((type=="PLACE")&&(((j>0)&&(me.searchPlace(i,j-1,player_id,all_obj)))||((i>0)&&(me.searchPlace(i-1,j,player_id,all_obj)))||((j<heigth-1)&&(me.searchPlace(i,j+1,player_id,all_obj)))||((i<width-1)&&(me.searchPlace(i+1,j,player_id,all_obj))))){		
 			return true;
 		} else if (type=="PLACE") {
 			return false;
 		}
-		
+
 		for (i=0;i<=all_obj.length-1;i++){
 			if ((all_obj[i].coord[0]==coord[0]) && (all_obj[i].coord[1]==coord[1])&&(all_obj[i].playerId==player_id)){
 				if((config_block==true) && (all_obj[i].type=="PLACE")){
 					return true;
-				}
-				return false;
+				}	else {return false;}
+			} else if(config_block==false){
+				return true;
+
 			}
-		}	
+			
+		}
+	}	
 		
-	}
 }

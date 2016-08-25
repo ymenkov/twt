@@ -6,13 +6,13 @@ var hw=50;
 var marg=10;
 var player="Валерий";
 
-var w = new World(30,30, gameObjects);
+var w = new World(11,16, gameObjects);
 w.startWorld();
 
 w.createPlayer(player, [0,0]);
 w.createObject('ORK', 0, [1,1]);
 
-var player_id=1;
+var player_id=0;
 w.createPlayer("Инокентий", [10,15]);
 w.createPlayer("Александр", [10,5]);
 //w.createPlace();
@@ -181,7 +181,8 @@ function VIEW(){
 		arrAll.forEach(function(object){
 			switch (object.type){
 				case 'WALL' :
-					masM[object.coord[0]][object.coord[1]].style.backgroundColor ="rgb(28, 28, 28)";
+				//	masM[object.coord[0]][object.coord[1]].style.backgroundColor ="rgb(28, 28, 28)";
+					rendO();
 				break;
 
 				case 'PLACE' :
@@ -190,21 +191,23 @@ function VIEW(){
 					}
 				break;
 
-				case 'INFO' :
-				break;
-
 				case 'CASTLE':
 					masM[object.coord[0]][object.coord[1]].style.backgroundColor = generateColor(object.player_id);//"black";
-	
+					rendO();
+					break;
 
 				default:
-					renderObject(object, images[object.type]);
-					if(object.attackTarget){
-						var target_obj = findObjectById(object.attackTarget, 'ORK'); //TODO - need target ID from server
-						if(target_obj)
-							renderAttackAnimation(object.type, object.coord, target_obj.coord);
-					}
+					rendO();
 					break;
+
+					function rendO(){
+						renderObject(object, images[object.type]);
+						if(object.attackTarget){
+							var target_obj = findObjectById(object.attackTarget, 'ORK'); //TODO - need target ID from server
+							if(target_obj)
+							renderAttackAnimation(object.type, object.coord, target_obj.coord);
+						}
+					}
 			}
 
 		});	

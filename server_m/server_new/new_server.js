@@ -14,7 +14,7 @@ var gameObjects = [{
 	"hp": 1000,
 	"price": 100,
 	"moveTargets": ["TOWER","CASTLE", "HUNTER"],
-	"attackTargets": ["TOWER","CASTLE", "HUNTER"],
+	"attackTargets": ["TOWER","CASTLE", "HUNTER","WALL"],
 	"damage": 100,
 	"moveSpeed": 1,
 	"attackSpeed": 1,
@@ -25,7 +25,7 @@ var gameObjects = [{
 	"hp": 1000,
 	"price": 100,
 	"moveTargets": false,
-	"attackTargets": ["CASTLE", "ORK"],
+	"attackTargets": ["CASTLE", "ORK","HUNTER"],
 	"damage": 100,
 	"moveSpeed": 1,
 	"attackSpeed": 1,
@@ -52,6 +52,17 @@ var gameObjects = [{
 	"moveSpeed": 0,
 	"attackSpeed": 0,
 	"attackRadius": 0,
+	"block": true
+},{
+	"type": "HUNTER",
+	"hp": 1000,
+	"price": 100,
+	"moveTargets": ["ORK"],
+	"attackTargets": ["ORK"],
+	"damage": 500,
+	"moveSpeed": 2,
+	"attackSpeed": 2,
+	"attackRadius": 2,
 	"block": false
 }];
 
@@ -99,8 +110,22 @@ function World(width, height, gameObjects){
 		
 		players.push(new_player);
 		me.createObject('CASTLE', new_player.id, coordinate);
+		this.buildCastle(coordinate,new_player.id);
+		//alert(new_player.id)
 	};	
 
+	this.buildCastle=function(coord,player_id){
+			for (var i=0;i<=10;i++){
+				for(var j=0;j<=15;j++){
+					if ((Math.abs((i-coord[0]))<3)&&(Math.abs((j-coord[1])))<3){
+						if ((i==coord[0])&&(j==coord[1])){}else{
+							var config = findObjectInArray(gameObjects, 'type', "PLACE");
+							me.createObject("PLACE", player_id, [i,j], config);						}
+							
+					}
+				}
+			}	
+	}
 
 	function gameObject(id, type, playerId, coordinate, config){
 		this.id=id;
@@ -168,7 +193,10 @@ function World(width, height, gameObjects){
 				attackTargets.forEach(function(target){
 					target.hp-=gameObj.damage;
 					gameObj.attackTarget = target.id;
-					if (target.hp<=0){target.hp="del";}
+					if (target.hp<=0){
+						//if (target.type=="CASTLE") {dieAllObject(target.player_id);}
+						target.hp="del";
+					}
 				});
 				delete attackTargets;
 
@@ -201,7 +229,7 @@ function World(width, height, gameObjects){
 	me.buyObject = function(type, playerId, coordinate){ 
 		var config = findObjectInArray(gameObjects, 'type', type);
 		var player = findObjectInArray(players, 'id', playerId);
-		if( config && player && me.gameMap.checkPointToFree(coordinate) ){
+		if( config && player && me.gameMap.checkPointToFree(coordinate,all_obj,config.block,type,playerId)){
 			if(player.gold >= config.price){
 				player.gold -= config.price;
 				me.createObject(type, playerId, coordinate, config);

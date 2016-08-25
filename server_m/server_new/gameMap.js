@@ -29,7 +29,7 @@ function GameMap(width, height){
 
 		var objects = findObjectsInArray(all_obj, 'block', true);
 		objects.forEach(function(obj){ 
-			if(obj && obj.coord != to )
+			if((obj && obj.coord != to ) && (obj.hp!="del"))
 				grid.setWalkableAt(obj.coord[0], obj.coord[1], false);
 		});
 
@@ -40,7 +40,33 @@ function GameMap(width, height){
 		//TODO - need for find CASTLE long away coordinate
 	}
 
-	me.checkPointToFree = function(coordinate){
-		return true;
+	me.searchPlace=function(i,j,player_id,all){
+		for (var k=0;k<=all.length-1;k++){
+		//	alert(all[k].playerId)
+			if ((all[k].type=="PLACE") && (all[k].coord[0]==i)&&(all[k].coord[1]==j)&&(all[k].playerId==player_id)){
+
+				return true;
+			}
+		}
+		return false;
+	}
+
+	me.checkPointToFree = function(coord,all_obj,config_block,type,player_id){
+		var i = coord[0]; var j = coord[1];
+		if ((type=="PLACE")&&(((j>0)&&(me.searchPlace(i,j-1,player_id,all_obj)))||((i>0)&&(me.searchPlace(i-1,j,player_id,all_obj)))||((j<15)&&(me.searchPlace(i,j+1,player_id,all_obj)))||((i<10)&&(me.searchPlace(i+1,j,player_id,all_obj))))){		
+			return true;
+		} else if (type=="PLACE") {
+			return false;
+		}
+		
+		for (i=0;i<=all_obj.length-1;i++){
+			if ((all_obj[i].coord[0]==coord[0]) && (all_obj[i].coord[1]==coord[1])&&(all_obj[i].playerId==player_id)){
+				if((config_block==true) && (all_obj[i].type=="PLACE")){
+					return true;
+				}
+				return false;
+			}
+		}	
+		
 	}
 }

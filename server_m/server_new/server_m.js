@@ -231,7 +231,7 @@ function WORLD(){
 
 	this.addPlace=function(i,j,player_id){
 		var k = all[searchCastle(player_id)];
-		if (((j>0)&&(searchPlace(i,j-1,player_id)))||((i>0)&&(searchPlace(i-1,j,player_id)))||((j<15)&&(searchPlace(i,j+1,player_id)))||((i<10)&&(searchPlace(i+1,j,player_id)))){
+		if ((type=="PLACE")&&((j>0)&&(searchPlace(i,j-1,player_id,all_obj)))||((i>0)&&(searchPlace(i-1,j,player_id,all_obj)))||((j<15)&&(searchPlace(i,j+1,player_id,all_obj)))||((i<10)&&(searchPlace(i+1,j,player_id,all_obj)))){
 			if (((k.info.gold>9) || (k.info.place>0))){
 				if (k.info.place>0){k.info.place=k.info.place-1}else{k.info.gold=k.info.gold-10;}
 				id=id+1;
